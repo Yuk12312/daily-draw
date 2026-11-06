@@ -141,25 +141,45 @@
     btnStart: document.getElementById("btn-start"),
     btnDraw: document.getElementById("btn-draw"),
     btnCopy: document.getElementById("btn-copy"),
+    btnShare: document.getElementById("btn-share"),
+    btnDownload: document.getElementById("btn-download"),
     btnShowToday: document.getElementById("btn-show-today"),
     deck: document.getElementById("deck"),
     drawHint: document.getElementById("draw-hint"),
+    stepLabel: document.getElementById("step-label"),
     resultDate: document.getElementById("result-date"),
+    resultTheme: document.getElementById("result-theme"),
     resultQuestion: document.getElementById("result-question"),
     resultGlyph: document.getElementById("result-glyph"),
     resultTitle: document.getElementById("result-title"),
     resultReading: document.getElementById("result-reading"),
     resultNudge: document.getElementById("result-nudge"),
+    resultCard: document.getElementById("result-card"),
     intention: document.getElementById("intention-input"),
+    themeChips: document.getElementById("theme-chips"),
+    streakMsg: document.getElementById("streak-msg"),
     toast: document.getElementById("toast"),
   };
 
   const DEFAULT_QUESTION = "今日靈感指引";
+  const DEFAULT_THEME = "今日氣場";
+  const SITE_URL = "https://yuk12312.github.io/daily-draw/";
+  const STREAK_KEY = "daily-draw-streak-v1";
   let drawing = false;
   let pendingQuestion = "";
+  let pendingTheme = DEFAULT_THEME;
 
   function todayKey() {
     const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function yesterdayKey() {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
@@ -185,6 +205,36 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
+  function updateStreak(date) {
+    let streak = { count: 0, last: "" };
+    try {
+      streak = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}") || streak;
+    } catch {
+      streak = { count: 0, last: "" };
+    }
+    if (streak.last === date) {
+      return streak.count || 1;
+    }
+    const next = streak.last === yesterdayKey() ? (streak.count || 0) + 1 : 1;
+    localStorage.setItem(STREAK_KEY, JSON.stringify({ count: next, last: date }));
+    return next;
+  }
+
+  function showStreak(date) {
+    if (!els.streakMsg) return;
+    try {
+      const streak = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+      if (streak && streak.last === date && streak.count > 1) {
+        els.streakMsg.hidden = false;
+        els.streakMsg.textContent = `你已連續抽咗 ${streak.count} 日（純娛樂，無獎賞）`;
+      } else {
+        els.streakMsg.hidden = true;
+      }
+    } catch {
+      els.streakMsg.hidden = true;
+    }
+  }
+
   function showView(name) {
     els.home.hidden = name !== "home";
     els.draw.hidden = name !== "draw";
@@ -194,7 +244,6 @@
 
   function pickReading() {
     const day = todayKey();
-    // Stable-ish pick for the day (same device/day → same vibe if refreshed before first save — we save after pick)
     let hash = 0;
     for (let i = 0; i < day.length; i++) {
       hash = (hash * 31 + day.charCodeAt(i)) >>> 0;
@@ -208,14 +257,27 @@
     return q || DEFAULT_QUESTION;
   }
 
-  function fillResult(reading, dateIso, question) {
+  function selectedTheme() {
+    const on = els.themeChips && els.themeChips.querySelector(".chip.is-on");
+    return (on && on.getAttribute("data-theme")) || DEFAULT_THEME;
+  }
+
+  function fillResult(reading, dateIso, question, theme) {
     const q = normalizeQuestion(question);
+    const t = theme || DEFAULT_THEME;
     els.resultDate.textContent = formatDisplayDate(dateIso);
-    els.resultQuestion.textContent = q === DEFAULT_QUESTION ? DEFAULT_QUESTION : `你問的是：『${q}』`;
+    if (els.resultTheme) els.resultTheme.textContent = t;
+    els.resultQuestion.textContent = q === DEFAULT_QUESTION ? DEFAULT_QUESTION : `你嘅一念：『${q}』`;
     els.resultGlyph.textContent = reading.glyph;
     els.resultTitle.textContent = reading.title;
     els.resultReading.textContent = reading.reading;
     els.resultNudge.textContent = reading.nudge;
+    if (els.resultCard) {
+      els.resultCard.classList.remove("is-revealing");
+      void els.resultCard.offsetWidth;
+      els.resultCard.classList.add("is-revealing");
+    }
+    showStreak(dateIso);
   }
 
   function showToast(msg) {
@@ -229,21 +291,31 @@
 
   function startDrawFlow() {
     pendingQuestion = normalizeQuestion(els.intention ? els.intention.value : "");
+    pendingTheme = selectedTheme();
     drawing = false;
     els.deck.classList.remove("drawing", "reveal");
-    els.btnDraw.disabled = false;
-    els.btnDraw.textContent = "或者撳呢度抽";
-    els.drawHint.textContent = pendingQuestion === DEFAULT_QUESTION
-      ? "將心意放進牌裡，準備好就撳"
-      : "你嘅一念已記下，準備好就撳張牌";
+    els.btnDraw.disabled = true;
+    els.btnDraw.textContent = "深呼吸…";
+    if (els.stepLabel) els.stepLabel.textContent = "閉吓眼 · 慢慢深呼吸";
+    els.drawHint.textContent = "將一念放進牌裡…";
     showView("draw");
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wait = reduceMotion ? 80 : 800;
+    setTimeout(() => {
+      els.btnDraw.disabled = false;
+      els.btnDraw.textContent = "或者撳呢度抽";
+      els.drawHint.textContent = pendingQuestion === DEFAULT_QUESTION
+        ? "準備好就撳張牌"
+        : "你嘅一念已記下，準備好就撳張牌";
+    }, wait);
   }
 
   function runDraw() {
-    if (drawing) return;
+    if (drawing || els.btnDraw.disabled) return;
     const existing = loadState();
     if (existing && existing.date === todayKey()) {
-      fillResult(existing.reading, existing.date, existing.question);
+      fillResult(existing.reading, existing.date, existing.question, existing.theme);
       showView("locked");
       return;
     }
@@ -256,7 +328,6 @@
 
     const reading = pickReading();
     const date = todayKey();
-
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const wait = reduceMotion ? 200 : 1600;
 
@@ -265,29 +336,42 @@
       els.deck.classList.add("reveal");
 
       setTimeout(() => {
-        const state = { date, reading, question: pendingQuestion || DEFAULT_QUESTION };
+        updateStreak(date);
+        const state = {
+          date,
+          reading,
+          question: pendingQuestion || DEFAULT_QUESTION,
+          theme: pendingTheme || DEFAULT_THEME
+        };
         saveState(state);
-        fillResult(reading, date, state.question);
+        fillResult(reading, date, state.question, state.theme);
         showView("result");
         drawing = false;
       }, reduceMotion ? 50 : 450);
     }, wait);
   }
 
-  function copyResult() {
+  function buildShareText() {
     const state = loadState();
-    if (!state) return;
+    if (!state) return "";
     const r = state.reading;
     const question = normalizeQuestion(state.question);
-    const text = [
+    const theme = state.theme || DEFAULT_THEME;
+    return [
       "🔮【今日一抽占卜結果】",
-      `❓ 我的問題：${question}`,
-      `🎴 抽到牌卡：${r.title}`,
+      `🌙 主題：${theme}`,
+      `❓ 我嘅一念：${question}`,
+      `🎴 今日抽到：${r.title}`,
       `💬 解讀：${r.reading}${r.nudge ? " " + r.nudge : ""}`,
       "——",
-      "（僅供娛樂）聽日再嚟抽啦 🌙"
+      "（僅供娛樂）聽日再嚟抽啦 🌙",
+      SITE_URL
     ].join("\n");
+  }
 
+  function copyResult() {
+    const text = buildShareText();
+    if (!text) return;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(
         () => showToast("已複製結果文案 ✓"),
@@ -296,6 +380,46 @@
     } else {
       fallbackCopy(text);
     }
+  }
+
+  function shareResult() {
+    const text = buildShareText();
+    if (!text) return;
+    if (navigator.share) {
+      navigator.share({
+        title: "每日一抽",
+        text,
+        url: SITE_URL
+      }).then(
+        () => showToast("已打開分享"),
+        () => copyResult()
+      );
+    } else {
+      copyResult();
+      showToast("已複製，可貼去 WhatsApp／IG");
+    }
+  }
+
+  function downloadCard() {
+    const card = els.resultCard;
+    if (!card || typeof html2canvas !== "function") {
+      showToast("下載暫時未能用，試下截圖");
+      return;
+    }
+    showToast("整緊結果卡…");
+    html2canvas(card, {
+      backgroundColor: "#141225",
+      scale: 2,
+      useCORS: true
+    }).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "每日一抽-結果卡.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      showToast("已下載結果卡 ✓");
+    }).catch(() => {
+      showToast("下載失敗，試下截圖分享");
+    });
   }
 
   function fallbackCopy(text) {
@@ -320,10 +444,21 @@
     const today = todayKey();
 
     if (state && state.date === today) {
-      fillResult(state.reading, state.date, state.question);
+      fillResult(state.reading, state.date, state.question, state.theme);
       showView("locked");
     } else {
       showView("home");
+    }
+
+    if (els.themeChips) {
+      els.themeChips.addEventListener("click", (e) => {
+        const btn = e.target.closest(".chip");
+        if (!btn) return;
+        els.themeChips.querySelectorAll(".chip").forEach((chip) => {
+          chip.classList.toggle("is-on", chip === btn);
+          chip.setAttribute("aria-pressed", chip === btn ? "true" : "false");
+        });
+      });
     }
 
     els.btnStart.addEventListener("click", startDrawFlow);
@@ -336,10 +471,12 @@
       }
     });
     els.btnCopy.addEventListener("click", copyResult);
+    if (els.btnShare) els.btnShare.addEventListener("click", shareResult);
+    if (els.btnDownload) els.btnDownload.addEventListener("click", downloadCard);
     els.btnShowToday.addEventListener("click", () => {
       const s = loadState();
       if (s) {
-        fillResult(s.reading, s.date, s.question);
+        fillResult(s.reading, s.date, s.question, s.theme);
         showView("result");
       }
     });
