@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0a14" />
+  <meta name="description" content="每日一抽 — 粵語輕量占卜結果卡，僅供娛樂" />
+  <title>每日一抽 · 今日運勢</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="brand">
+      <p class="brand-mark">✦</p>
+      <h1 class="brand-name">每日一抽</h1>
+      <p class="brand-tag">今日一念 · 輕鬆睇下</p>
+    </header>
+
+    <!-- HOME -->
+    <section id="view-home" class="view" hidden>
+      <div class="hook-card">
+        <p class="hook-kicker">今日未抽？</p>
+        <h2 class="hook-title">停一停，抽一張<br />睇下今日氣場</h2>
+        <p class="hook-body">
+          唔使註冊、唔使登入。<br />
+          每日免費一抽，結果卡可以截圖分享。
+        </p>
+        <button type="button" class="btn btn-primary" id="btn-start">
+          開始今日一抽
+        </button>
+        <p class="fine-print">僅供娛樂，唔係專業諮詢</p>
+      </div>
+    </section>
+
+    <!-- DRAW -->
+    <section id="view-draw" class="view" hidden>
+      <p class="step-label">閉吓眼 · 想一件事</p>
+      <div class="deck" id="deck" role="button" tabindex="0" aria-label="撳一下抽牌">
+        <div class="card-back" id="card-back">
+          <span class="card-ornament">☽</span>
+          <span class="card-hint">撳一下抽</span>
+        </div>
+      </div>
+      <p class="draw-hint" id="draw-hint">準備好就撳張牌</p>
+      <button type="button" class="btn btn-ghost" id="btn-draw" disabled>抽緊…</button>
+    </section>
+
+    <!-- RESULT -->
+    <section id="view-result" class="view" hidden>
+      <article class="result-card" id="result-card" aria-live="polite">
+        <div class="result-top">
+          <span class="result-date" id="result-date"></span>
+          <span class="result-badge">今日一抽</span>
+        </div>
+        <div class="result-glyph" id="result-glyph" aria-hidden="true">✧</div>
+        <h2 class="result-title" id="result-title"></h2>
+        <p class="result-reading" id="result-reading"></p>
+        <p class="result-nudge" id="result-nudge"></p>
+        <div class="result-footer">
+          <span>每日一抽</span>
+          <span class="dot">·</span>
+          <span>僅供娛樂</span>
+        </div>
+      </article>
+
+      <div class="after-actions" id="after-actions">
+        <p class="share-hint">截圖呢張結果卡，分享畀朋友一齊笑下～</p>
+        <button type="button" class="btn btn-secondary" id="btn-copy">複製結果文案</button>
+        <p class="comeback" id="comeback-msg">聽日再嚟抽啦 🌙</p>
+      </div>
+    </section>
+
+    <!-- ALREADY DRAWN (revisit same day) -->
+    <section id="view-locked" class="view" hidden>
+      <div class="locked-wrap">
+        <p class="locked-emoji" aria-hidden="true">🌙</p>
+        <h2 class="locked-title">今日已經抽過喇</h2>
+        <p class="locked-body">留低份驚喜畀聽日自己。<br />想再睇今日結果？撳下面。</p>
+        <button type="button" class="btn btn-primary" id="btn-show-today">睇返今日結果</button>
+        <p class="comeback">聽日再嚟 ✨</p>
+      </div>
+    </section>
+
+    <footer class="site-foot">
+      <p>本站內容<strong>僅供娛樂</strong>，唔構成任何人生、感情、財務或健康建議。</p>
+      <p class="foot-brand">每日一抽 · MVP 預覽</p>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" hidden role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
