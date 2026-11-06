@@ -219,12 +219,18 @@
     themeChips: document.getElementById("theme-chips"),
     streakMsg: document.getElementById("streak-msg"),
     toast: document.getElementById("toast"),
+    actList: document.getElementById("act-list"),
+    todayNote: document.getElementById("today-note"),
+    noteSaved: document.getElementById("note-saved"),
+    historyBox: document.getElementById("history-box"),
+    historyList: document.getElementById("history-list"),
   };
 
   const DEFAULT_QUESTION = "今日靈感指引";
   const DEFAULT_THEME = "今日氣場";
   const SITE_URL = "https://yuk12312.github.io/daily-draw/";
   const STREAK_KEY = "daily-draw-streak-v1";
+  const HISTORY_KEY = "daily-draw-history-v1";
   let drawing = false;
   let pendingQuestion = "";
   let pendingTheme = DEFAULT_THEME;
@@ -326,9 +332,88 @@
     if (wantFood && !isFood) {
       state.reading = pickReading(state.question, state.theme);
       saveState(state);
+      recordHistory(state);
     }
     return state;
   }
+
+  function loadHistory() {
+    try {
+      const rows = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      return Array.isArray(rows) ? rows : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function recordHistory(state) {
+    if (!state || !state.reading) return;
+    const row = {
+      date: state.date,
+      glyph: state.reading.glyph,
+      title: state.reading.title,
+      theme: state.theme || DEFAULT_THEME,
+      question: normalizeQuestion(state.question)
+    };
+    const rows = loadHistory().filter((item) => item.date !== row.date);
+    rows.unshift(row);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(rows.slice(0, 14)));
+  }
+
+  function renderHistory(currentDate) {
+    if (!els.historyBox || !els.historyList) return;
+    const rows = loadHistory().filter((item) => item.date !== currentDate).slice(0, 7);
+    if (!rows.length) {
+      els.historyBox.hidden = true;
+      return;
+    }
+    els.historyBox.hidden = false;
+    els.historyList.innerHTML = rows.map((item) => {
+      const q = item.question && item.question !== DEFAULT_QUESTION ? item.question : item.theme;
+      return `<li><span class="h-glyph">${item.glyph || "✦"}</span><span>${item.date} · ${item.title} · ${q}</span></li>`;
+    }).join("");
+  }
+
+  function actionChoices(question, theme, reading) {
+    if (isFoodAsk(question, theme)) {
+      return ["跟住而家最想食嗰樣", "食嘅時候少刷陣手機", "食完飲杯暖嘅"];
+    }
+    if (theme === "打工") {
+      return ["完成一件細而明確嘅事", "起立伸展或者休息五分鐘", "覆一條拖住嘅訊息"];
+    }
+    if (theme === "姻緣心情") {
+      return ["傳句真誠關心（或者對自己講）", "今晚早少少收線", "寫低你欣賞對方／自己邊點"];
+    }
+    const nudge = reading && reading.nudge ? reading.nudge : "停一停，深呼吸一次";
+    return [nudge, "留十分鐘畀自己放空", "寫低今日一件多謝嘅事"];
+  }
+
+  function renderPlayOn(state) {
+    if (!state || !els.actList) return;
+    const acts = actionChoices(state.question, state.theme, state.reading);
+    const done = state.actionDone || "";
+    els.actList.innerHTML = "";
+    acts.forEach((label) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "act-btn" + (done === label ? " is-on" : "");
+      btn.textContent = (done === label ? "✓ " : "") + label;
+      btn.addEventListener("click", () => {
+        const next = loadState() || state;
+        next.actionDone = next.actionDone === label ? "" : label;
+        saveState(next);
+        renderPlayOn(next);
+        showToast(next.actionDone ? "記住喇，慢慢做就得" : "已取消");
+      });
+      els.actList.appendChild(btn);
+    });
+    if (els.todayNote) {
+      els.todayNote.value = state.note || "";
+    }
+    if (els.noteSaved) els.noteSaved.hidden = !state.note;
+    renderHistory(state.date);
+  }
+
 
   function normalizeQuestion(raw) {
     const q = (raw || "").trim();
@@ -356,6 +441,14 @@
       els.resultCard.classList.add("is-revealing");
     }
     showStreak(dateIso);
+    renderPlayOn({
+      date: dateIso,
+      reading,
+      question,
+      theme: t,
+      actionDone: (loadState() || {}).actionDone,
+      note: (loadState() || {}).note
+    });
   }
 
   function showToast(msg) {
@@ -422,6 +515,7 @@
           theme: pendingTheme || DEFAULT_THEME
         };
         saveState(state);
+        recordHistory(state);
         fillResult(reading, date, state.question, state.theme);
         showView("result");
         drawing = false;
@@ -523,10 +617,21 @@
 
     if (state && state.date === today) {
       const aligned = alignReading(state);
+      recordHistory(aligned);
       fillResult(aligned.reading, aligned.date, aligned.question, aligned.theme);
       showView("locked");
     } else {
       showView("home");
+    }
+
+    if (els.todayNote) {
+      els.todayNote.addEventListener("input", () => {
+        const next = loadState();
+        if (!next) return;
+        next.note = els.todayNote.value.slice(0, 120);
+        saveState(next);
+        if (els.noteSaved) els.noteSaved.hidden = !next.note;
+      });
     }
 
     if (els.themeChips) {

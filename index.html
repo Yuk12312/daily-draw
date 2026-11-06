@@ -111,6 +111,18 @@
         <div class="action-row">
           <button type="button" class="btn btn-primary" id="btn-share">分享</button>
           <button type="button" class="btn btn-secondary" id="btn-download">下載結果卡</button>
+</div>
+        <div class="play-on" id="play-on">
+          <p class="play-kicker">抽完未完</p>
+          <p class="play-lead">今日可以做一件細事（純娛樂，無獎賞）</p>
+          <div class="act-list" id="act-list"></div>
+          <label class="note-label" for="today-note">寫低一句今日感受（只存在呢部裝置）</label>
+          <textarea id="today-note" class="today-note" rows="2" maxlength="120" placeholder="例如：其實我只係想食得簡單啲"></textarea>
+          <p class="note-saved" id="note-saved" hidden>已記住</p>
+          <div class="history-box" id="history-box" hidden>
+            <p class="play-lead">你近期抽過</p>
+            <ul class="history-list" id="history-list"></ul>
+          </div>
         </div>
         <aside class="tip-box" id="tip-box">
           <p class="tip-kicker">自願打賞</p>
@@ -129,7 +141,7 @@
       <div class="locked-wrap">
         <p class="locked-emoji" aria-hidden="true">🌙</p>
         <h2 class="locked-title">今日已經抽過喇</h2>
-        <p class="locked-body">每個裝置每日一抽，聽日零晨重置。<br />想再睇今日結果？撳下面。</p>
+        <p class="locked-body">每個裝置每日一抽，聽日零晨重置。<br />抽完都可以寫感受、剔一件細事，或者睇返舊日結果。</p>
         <button type="button" class="btn btn-primary" id="btn-show-today">睇返今日結果</button>
         <p class="comeback">聽日再嚟 ✨</p>
       </div>
