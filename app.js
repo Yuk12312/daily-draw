@@ -145,14 +145,18 @@
     deck: document.getElementById("deck"),
     drawHint: document.getElementById("draw-hint"),
     resultDate: document.getElementById("result-date"),
+    resultQuestion: document.getElementById("result-question"),
     resultGlyph: document.getElementById("result-glyph"),
     resultTitle: document.getElementById("result-title"),
     resultReading: document.getElementById("result-reading"),
     resultNudge: document.getElementById("result-nudge"),
+    intention: document.getElementById("intention-input"),
     toast: document.getElementById("toast"),
   };
 
+  const DEFAULT_QUESTION = "今日靈感指引";
   let drawing = false;
+  let pendingQuestion = "";
 
   function todayKey() {
     const d = new Date();
@@ -199,8 +203,15 @@
     return READINGS[hash];
   }
 
-  function fillResult(reading, dateIso) {
+  function normalizeQuestion(raw) {
+    const q = (raw || "").trim();
+    return q || DEFAULT_QUESTION;
+  }
+
+  function fillResult(reading, dateIso, question) {
+    const q = normalizeQuestion(question);
     els.resultDate.textContent = formatDisplayDate(dateIso);
+    els.resultQuestion.textContent = q === DEFAULT_QUESTION ? DEFAULT_QUESTION : `你問的是：『${q}』`;
     els.resultGlyph.textContent = reading.glyph;
     els.resultTitle.textContent = reading.title;
     els.resultReading.textContent = reading.reading;
@@ -217,11 +228,14 @@
   }
 
   function startDrawFlow() {
+    pendingQuestion = normalizeQuestion(els.intention ? els.intention.value : "");
     drawing = false;
     els.deck.classList.remove("drawing", "reveal");
     els.btnDraw.disabled = false;
     els.btnDraw.textContent = "或者撳呢度抽";
-    els.drawHint.textContent = "準備好就撳張牌";
+    els.drawHint.textContent = pendingQuestion === DEFAULT_QUESTION
+      ? "將心意放進牌裡，準備好就撳"
+      : "你嘅一念已記下，準備好就撳張牌";
     showView("draw");
   }
 
@@ -229,7 +243,7 @@
     if (drawing) return;
     const existing = loadState();
     if (existing && existing.date === todayKey()) {
-      fillResult(existing.reading, existing.date);
+      fillResult(existing.reading, existing.date, existing.question);
       showView("locked");
       return;
     }
@@ -251,9 +265,9 @@
       els.deck.classList.add("reveal");
 
       setTimeout(() => {
-        const state = { date, reading };
+        const state = { date, reading, question: pendingQuestion || DEFAULT_QUESTION };
         saveState(state);
-        fillResult(reading, date);
+        fillResult(reading, date, state.question);
         showView("result");
         drawing = false;
       }, reduceMotion ? 50 : 450);
@@ -264,12 +278,13 @@
     const state = loadState();
     if (!state) return;
     const r = state.reading;
+    const question = normalizeQuestion(state.question);
     const text = [
-      `【每日一抽】${formatDisplayDate(state.date)}`,
-      `${r.glyph} ${r.title}`,
-      r.reading,
-      r.nudge,
-      "",
+      "🔮【今日一抽占卜結果】",
+      `❓ 我的問題：${question}`,
+      `🎴 抽到牌卡：${r.title}`,
+      `💬 解讀：${r.reading}${r.nudge ? " " + r.nudge : ""}`,
+      "——",
       "（僅供娛樂）聽日再嚟抽啦 🌙"
     ].join("\n");
 
@@ -305,7 +320,7 @@
     const today = todayKey();
 
     if (state && state.date === today) {
-      fillResult(state.reading, state.date);
+      fillResult(state.reading, state.date, state.question);
       showView("locked");
     } else {
       showView("home");
@@ -324,7 +339,7 @@
     els.btnShowToday.addEventListener("click", () => {
       const s = loadState();
       if (s) {
-        fillResult(s.reading, s.date);
+        fillResult(s.reading, s.date, s.question);
         showView("result");
       }
     });

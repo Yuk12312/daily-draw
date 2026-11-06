@@ -31,6 +31,14 @@
           唔使註冊、唔使登入。<br />
           每日免費一抽，結果卡可以截圖分享。
         </p>
+        <label class="intention-label" for="intention-input">今日一念</label>
+        <textarea
+          id="intention-input"
+          class="intention-input"
+          rows="3"
+          maxlength="200"
+          placeholder="輸入你今天的心事、問題或想尋求的指引（選填）..."
+        ></textarea>
         <button type="button" class="btn btn-primary" id="btn-start">
           開始今日一抽
         </button>
@@ -40,7 +48,7 @@
 
     <!-- DRAW -->
     <section id="view-draw" class="view" hidden>
-      <p class="step-label">閉吓眼 · 想一件事</p>
+      <p class="step-label">閉吓眼 · 將你嘅一念放進牌裡</p>
       <div class="deck" id="deck" role="button" tabindex="0" aria-label="撳一下抽牌">
         <div class="card-back" id="card-back">
           <span class="card-ornament">☽</span>
@@ -58,6 +66,7 @@
           <span class="result-date" id="result-date"></span>
           <span class="result-badge">今日一抽</span>
         </div>
+        <p class="result-question" id="result-question"></p>
         <div class="result-glyph" id="result-glyph" aria-hidden="true">✧</div>
         <h2 class="result-title" id="result-title"></h2>
         <p class="result-reading" id="result-reading"></p>
