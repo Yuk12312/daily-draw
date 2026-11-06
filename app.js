@@ -133,6 +133,66 @@
     }
   ];
 
+
+  const FOOD_READINGS = [
+    {
+      id: "food-hot-wok",
+      glyph: "🔥",
+      title: "鑊氣一口",
+      reading: "今日適合有鑊氣、熱辣或者煎炒嘅嘢。想食咩香口就跟感覺行，唔好迫自己清淡。呢個只係娛樂提示，唔係營養或醫療建議。",
+      nudge: "附近茶餐廳或者你熟悉嗰檔，已經好啱。"
+    },
+    {
+      id: "food-warm-bowl",
+      glyph: "🍜",
+      title: "暖笠笠一碗",
+      reading: "今日想要一碗熱嘅：湯粉麵、粥或者燉湯。慢慢食，當係停低休息，唔使研究大餐。",
+      nudge: "揀暖胃、步驟少嘅一碗就得。"
+    },
+    {
+      id: "food-fresh",
+      glyph: "🥗",
+      title: "清爽一口",
+      reading: "今日口感偏向清爽：蒸嘢、青菜、水果或者清湯都得。身體想淡啲就聽佢，唔使勉強重口味。",
+      nudge: "加碟熟菜，食得自在就好。"
+    },
+    {
+      id: "food-neighbour",
+      glyph: "🏪",
+      title: "街坊味道",
+      reading: "唔使搵新餐廳。附近熟食、茶記、平時那檔已經啱今日。熟口熟面，反而最順。",
+      nudge: "行去你第一時間諗到嗰間。"
+    },
+    {
+      id: "food-share",
+      glyph: "🥢",
+      title: "同人分享",
+      reading: "今日食嘢適合一齊：叫多一味分、或者約人飲茶開餐。分享比獨食更對題。",
+      nudge: "問句「今晚一齊食？」"
+    },
+    {
+      id: "food-gut",
+      glyph: "💭",
+      title: "聽肚說話",
+      reading: "你其實知想食咩，只係選擇困難。第一個閃過腦海嘅就係答案，唔好刷餐牌刷到肚餓加躁。",
+      nudge: "唔好睇 menu 超過三分鐘。"
+    },
+    {
+      id: "food-sweet",
+      glyph: "🍰",
+      title: "小小甜",
+      reading: "可以獎勵自己一件甜品或者平時少食嘅小食。一次開心就得，唔使有罪惡感，亦唔係叫你日日咁。",
+      nudge: "一份細的已經夠甜。"
+    },
+    {
+      id: "food-home",
+      glyph: "🍚",
+      title: "家常一碟",
+      reading: "簡單家常味道會更舒服：白飯、碟熟菜、或者屋企口味。唔使為咗『食咩好』而複雜化。",
+      nudge: "返屋企食，或者叫平時那款都得。"
+    }
+  ];
+
   const els = {
     home: document.getElementById("view-home"),
     draw: document.getElementById("view-draw"),
@@ -242,14 +302,32 @@
     els.locked.hidden = name !== "locked";
   }
 
-  function pickReading() {
+  function isFoodAsk(question, theme) {
+    if ((theme || "") === "今日食咩") return true;
+    return /食|餐|餸|餓|肚餓|開餐|宵夜|早餐|午餐|晚餐|下午茶|飲茶|點心|外賣|煮飯|煮餐|菜單|餐單|eat/i.test(question || "");
+  }
+
+  function pickReading(question, theme) {
+    const pool = isFoodAsk(question, theme) ? FOOD_READINGS : READINGS;
     const day = todayKey();
     let hash = 0;
-    for (let i = 0; i < day.length; i++) {
-      hash = (hash * 31 + day.charCodeAt(i)) >>> 0;
+    const seed = day + "|" + (question || "") + "|" + (theme || "");
+    for (let i = 0; i < seed.length; i++) {
+      hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
     }
-    hash = (hash + Math.floor(Math.random() * 9973)) % READINGS.length;
-    return READINGS[hash];
+    hash = (hash + Math.floor(Math.random() * 9973)) % pool.length;
+    return pool[hash];
+  }
+
+  function alignReading(state) {
+    if (!state || !state.reading) return state;
+    const wantFood = isFoodAsk(state.question, state.theme);
+    const isFood = FOOD_READINGS.some((item) => item.id === state.reading.id);
+    if (wantFood && !isFood) {
+      state.reading = pickReading(state.question, state.theme);
+      saveState(state);
+    }
+    return state;
   }
 
   function normalizeQuestion(raw) {
@@ -326,7 +404,7 @@
     els.drawHint.textContent = "牌氣聚集緊…";
     els.deck.classList.add("drawing");
 
-    const reading = pickReading();
+    const reading = pickReading(pendingQuestion, pendingTheme);
     const date = todayKey();
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const wait = reduceMotion ? 200 : 1600;
@@ -444,7 +522,8 @@
     const today = todayKey();
 
     if (state && state.date === today) {
-      fillResult(state.reading, state.date, state.question, state.theme);
+      const aligned = alignReading(state);
+      fillResult(aligned.reading, aligned.date, aligned.question, aligned.theme);
       showView("locked");
     } else {
       showView("home");
@@ -474,7 +553,7 @@
     if (els.btnShare) els.btnShare.addEventListener("click", shareResult);
     if (els.btnDownload) els.btnDownload.addEventListener("click", downloadCard);
     els.btnShowToday.addEventListener("click", () => {
-      const s = loadState();
+      const s = alignReading(loadState());
       if (s) {
         fillResult(s.reading, s.date, s.question, s.theme);
         showView("result");
