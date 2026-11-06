@@ -620,3 +620,38 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .result-card.is-revealing .result-glyph { animation: none; }
 }
+
+/* Tip / donation */
+.tip-box {
+  margin-top: 22px;
+  padding: 18px 16px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(232, 201, 122, 0.28);
+  background: linear-gradient(180deg, rgba(42, 33, 80, 0.55), rgba(11, 10, 20, 0.4));
+  text-align: center;
+}
+.tip-kicker {
+  margin: 0 0 8px;
+  color: #e8c97a;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+}
+.tip-copy {
+  margin: 0 0 14px;
+  color: #cfc6e6;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.tip-qr {
+  display: block;
+  width: 168px;
+  height: 168px;
+  margin: 0 auto 14px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #f7f2ff;
+}
+.tip-box .btn {
+  display: inline-flex;
+  text-decoration: none;
+}
