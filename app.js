@@ -7,6 +7,7 @@
   const READINGS = [
     {
       id: "soft-breeze",
+      topics: ["general", "rest", "travel"],
       glyph: "🌬",
       title: "微風過隙",
       reading: "今日適合輕輕放慢半步。唔使急住證明自己，順住感覺做小事，反而會有意外驚喜。",
@@ -14,6 +15,7 @@
     },
     {
       id: "warm-lamp",
+      topics: ["general", "rest"],
       glyph: "🕯",
       title: "燈火微明",
       reading: "有啲悶唔代表冇進展。你而家累積緊嘅，聽日可能就會用得著。記住對自己溫柔啲。",
@@ -21,6 +23,7 @@
     },
     {
       id: "open-window",
+      topics: ["general", "social", "travel"],
       glyph: "🪟",
       title: "窗開一縫",
       reading: "機會可能以『偶然一句說話』出現。保持好奇，但唔使即刻應承所有事。聽完先決定。",
@@ -28,6 +31,7 @@
     },
     {
       id: "steady-cup",
+      topics: ["general", "work"],
       glyph: "☕",
       title: "杯裡穩陣",
       reading: "今日節奏偏穩。適合處理積壓嘅雜事，清完台面會突然覺得世界闊咗一點。",
@@ -35,6 +39,7 @@
     },
     {
       id: "spark-note",
+      topics: ["general", "work"],
       glyph: "✨",
       title: "一點火花",
       reading: "靈感會嚟，但好短暫。見到就記低，唔好等『完美時機』。半成品都好過空白。",
@@ -42,6 +47,7 @@
     },
     {
       id: "quiet-tide",
+      topics: ["general", "rest", "travel"],
       glyph: "🌊",
       title: "潮退一刻",
       reading: "有啲事先放低反而會清楚啲。今日唔適合硬碰硬；轉個角度，路可能自己出現。",
@@ -49,6 +55,7 @@
     },
     {
       id: "kind-echo",
+      topics: ["social", "romance"],
       glyph: "🔔",
       title: "善意回聲",
       reading: "你今日講出嚟嘅關心，可能比你想像中更重要。一句『你今日點呀』已經夠溫暖。",
@@ -56,6 +63,7 @@
     },
     {
       id: "clear-path",
+      topics: ["general", "travel"],
       glyph: "🛤",
       title: "路標清晰",
       reading: "心裡其實有答案，只係想要多一次確認。信自己一次啦；小決定都可以練膽。",
@@ -63,6 +71,7 @@
     },
     {
       id: "playful-cloud",
+      topics: ["general", "rest"],
       glyph: "☁",
       title: "雲端玩笑",
       reading: "唔好太認真對待所有小煩惱。今日適合用幽默拆解尷尬；笑完之後，事會變輕。",
@@ -70,6 +79,7 @@
     },
     {
       id: "rooted-tree",
+      topics: ["general", "rest"],
       glyph: "🌳",
       title: "根深一步",
       reading: "穩定感嚟自日常小習慣。唔使大改造；一杯水、一個伸展、一封覆完嘅訊息，就夠。",
@@ -77,6 +87,7 @@
     },
     {
       id: "silver-thread",
+      topics: ["social", "romance"],
       glyph: "🧵",
       title: "銀線相連",
       reading: "舊朋友或者舊話題可能會翻出嚟。唔使急住重啟關係，真誠回應已經係最好態度。",
@@ -84,6 +95,7 @@
     },
     {
       id: "moon-pocket",
+      topics: ["general", "rest"],
       glyph: "🌙",
       title: "口袋裡的月",
       reading: "今日適合收藏多過展示。你唔需要即刻被看見；先做好自己嗰份，光會慢慢透出嚟。",
@@ -91,6 +103,7 @@
     },
     {
       id: "fresh-ink",
+      topics: ["general", "work", "travel"],
       glyph: "🖋",
       title: "新墨未乾",
       reading: "開新頁唔等於丟低過去。帶住有用嘅經驗往前走就得；唔完美都值得開始。",
@@ -98,6 +111,7 @@
     },
     {
       id: "gentle-rain",
+      topics: ["rest", "general"],
       glyph: "🌧",
       title: "細雨洗塵",
       reading: "情緒可能有啲起伏，唔使壓抑。畀自己空間感受，雨過之後視野會乾淨啲。",
@@ -105,6 +119,7 @@
     },
     {
       id: "bright-coin",
+      topics: ["money"],
       glyph: "🪙",
       title: "亮亮小幣",
       reading: "小確幸以『慳到時間／錢／心機』嘅形式出現。留意細節，會發現自己其實好會打理生活。",
@@ -112,6 +127,7 @@
     },
     {
       id: "shared-umbrella",
+      topics: ["social", "work"],
       glyph: "☂",
       title: "共傘一刻",
       reading: "合作比單打獨鬥更順。今日適合問人借意見，或者主動幫人一把——互惠感會好強。",
@@ -119,6 +135,7 @@
     },
     {
       id: "late-bloom",
+      topics: ["general", "work"],
       glyph: "🌸",
       title: "遲開的花",
       reading: "進度慢唔等於失敗。有啲事需要發酵；你已經喺正確方向，只係未到開花日。",
@@ -126,6 +143,7 @@
     },
     {
       id: "compass-heart",
+      topics: ["general", "rest", "travel"],
       glyph: "🧭",
       title: "心裡指南",
       reading: "外面聲音好多，但身體同直覺會提點你。覺得累就休，覺得對就試；今日跟感覺行。",
@@ -133,6 +151,7 @@
     },
     {
       id: "office-breeze",
+      topics: ["work"],
       glyph: "🖥",
       title: "工位微風",
       reading: "打工氣場偏順但唔係爆發日。適合清 inbox、寫清楚、一次搞掂一件；唔好一次開十個 tab。",
@@ -140,6 +159,7 @@
     },
     {
       id: "deadline-soft",
+      topics: ["work"],
       glyph: "⏰",
       title: "死線軟著陸",
       reading: "有壓力唔代表要硬撐。拆細步驟、提早交一截，反而有餘地呼吸。呢個只係娛樂提醒。",
@@ -147,6 +167,7 @@
     },
     {
       id: "meeting-pause",
+      topics: ["work"],
       glyph: "🎙",
       title: "會前一息",
       reading: "今日傾事前，畀自己三十秒整理重點。講少啲廢話、聽多啲，會顯得更穩陣。",
@@ -154,6 +175,7 @@
     },
     {
       id: "inbox-zero-ish",
+      topics: ["work", "digital"],
       glyph: "📥",
       title: "半個清空",
       reading: "唔使追求完美清空。揀五封最阻住你嘅覆完，已經算今日大勝。",
@@ -161,6 +183,7 @@
     },
     {
       id: "colleague-tea",
+      topics: ["work", "social"],
       glyph: "🧋",
       title: "工友一杯",
       reading: "職場人際適合輕輕維護：請杯嘢飲、講句多謝，已夠用。唔使硬做社交達人。",
@@ -168,6 +191,7 @@
     },
     {
       id: "after-work-border",
+      topics: ["work", "rest"],
       glyph: "🚪",
       title: "放工界線",
       reading: "今日適合畫一條溫柔界線：放工後唔即刻回工訊。休息都係生產力一部分（娛樂講法）。",
@@ -175,6 +199,7 @@
     },
     {
       id: "slow-crush",
+      topics: ["romance"],
       glyph: "💌",
       title: "慢熱心動",
       reading: "姻緣心情偏慢熱。唔使急住定性；多留意對方細微善意，自己都真誠就好。",
@@ -182,6 +207,7 @@
     },
     {
       id: "self-date",
+      topics: ["romance", "rest"],
       glyph: "🪞",
       title: "同自己約會",
       reading: "今日最穩陣係對自己好啲。單身定拍緊拖都一樣：先把自己情緒安頓好，先有多餘去愛人。",
@@ -189,6 +215,7 @@
     },
     {
       id: "text-courage",
+      topics: ["digital", "romance", "social"],
       glyph: "📱",
       title: "傳訊小勇",
       reading: "想講嘅說話可能卡喺草稿。精簡一句真心話就夠；今日唔適合寫長篇辯論。",
@@ -196,6 +223,7 @@
     },
     {
       id: "warm-boundary",
+      topics: ["romance", "social"],
       glyph: "🛡",
       title: "溫柔界線",
       reading: "關係入面可以溫柔拒絕。講『今日唔得，但我想改日』，已經係成熟同關心。",
@@ -203,6 +231,7 @@
     },
     {
       id: "old-playlist",
+      topics: ["rest", "general"],
       glyph: "🎧",
       title: "舊歌翻熱",
       reading: "日常情緒會被一首舊歌輕輕拉返正面。畀自己沉浸十分鐘，唔使解釋點解開心。",
@@ -210,6 +239,7 @@
     },
     {
       id: "tidy-corner",
+      topics: ["general", "rest"],
       glyph: "🧹",
       title: "一角整齊",
       reading: "環境亂，心都會嘈。今日只執一個角落：枱面、背包或者相簿，已經夠清爽。",
@@ -217,6 +247,7 @@
     },
     {
       id: "walk-loop",
+      topics: ["rest", "travel"],
       glyph: "🚶",
       title: "行個圈",
       reading: "卡住就行。唔使跑遠；樓下轉兩圈，腦會自動換氣，好多『大件事』會變細。",
@@ -224,6 +255,7 @@
     },
     {
       id: "nap-permission",
+      topics: ["rest"],
       glyph: "😴",
       title: "准假小睡",
       reading: "今日氣場偏休息向。二十分鐘小休好過硬撐到頭痕；醒返先再處理難題。",
@@ -231,6 +263,7 @@
     },
     {
       id: "screen-dim",
+      topics: ["digital", "rest"],
       glyph: "🔅",
       title: "螢幕調暗",
       reading: "資訊太多會令選擇困難。今日適合減少刷 feed，專心一件眼前事，效率反而升。",
@@ -238,6 +271,7 @@
     },
     {
       id: "stretch-reset",
+      topics: ["rest"],
       glyph: "🧘",
       title: "伸展重置",
       reading: "身體提點你停低。膊頭、腰、眼都要休息；三分鐘伸展已經係對自己負責。",
@@ -245,6 +279,7 @@
     },
     {
       id: "friend-checkin",
+      topics: ["social"],
       glyph: "🗣",
       title: "朋友報到",
       reading: "社交唔使盛大。一句『食咗未』『忙唔忙』，已經維持住連結。今日適合輕量聯絡。",
@@ -252,6 +287,7 @@
     },
     {
       id: "small-gather",
+      topics: ["social"],
       glyph: "🍽",
       title: "細聚剛好",
       reading: "大型局可能攰；兩三個人傾偈反而更對題。質素高過人數。",
@@ -259,6 +295,7 @@
     },
     {
       id: "listen-mode",
+      topics: ["social", "romance"],
       glyph: "👂",
       title: "聽多講少",
       reading: "今日你嘅價值可能係聽。畀人講完，再問一句跟進，關係會暖咗一截。",
@@ -266,6 +303,7 @@
     },
     {
       id: "group-chat-mute",
+      topics: ["digital", "social"],
       glyph: "🔕",
       title: "群組靜音",
       reading: "社交能量有限。暫時靜音嘈群組唔係絕交，係保護注意力；有重要會有人私訊你。",
@@ -273,6 +311,7 @@
     },
     {
       id: "pocket-change",
+      topics: ["money"],
       glyph: "💵",
       title: "袋裡零錢",
       reading: "錢途話題今日只適合輕描淡寫：留意小開支、記低一筆都得。唔係投資建議，純娛樂心情牌。",
@@ -280,6 +319,7 @@
     },
     {
       id: "receipt-tidy",
+      topics: ["money"],
       glyph: "🧾",
       title: "單據收拾",
       reading: "適合整理帳目同訂閱。發現多餘支出會有種『執返把米』嘅爽；同樣只係生活娛樂提示。",
@@ -287,6 +327,7 @@
     },
     {
       id: "value-over-price",
+      topics: ["money"],
       glyph: "🏷",
       title: "抵唔抵心水",
       reading: "今日買嘢睇『值唔值得開心』多過平唔平。一件用得著嘅，好過一堆閒置。",
@@ -294,6 +335,7 @@
     },
     {
       id: "side-hustle-seed",
+      topics: ["money", "work"],
       glyph: "🌱",
       title: "副業一粒種",
       reading: "若你有小念頭，今日只適合落一粒種子：筆記、草圖、問一個人。唔使即刻變生意。",
@@ -301,6 +343,7 @@
     },
     {
       id: "aura-glow",
+      topics: ["general"],
       glyph: "🌟",
       title: "氣場微光",
       reading: "今日整體氣場平穩偏亮。唔使強求大運；做好本分、對人客氣，已經好睇。",
@@ -308,6 +351,7 @@
     },
     {
       id: "fog-lift",
+      topics: ["general", "travel"],
       glyph: "🌤",
       title: "霧氣散開",
       reading: "早段可能矇查查，午後會清楚啲。重要事先排後段，或者分段做，會順啲。",
@@ -315,6 +359,7 @@
     },
     {
       id: "lucky-detail",
+      topics: ["general", "travel"],
       glyph: "🔎",
       title: "細節小運",
       reading: "好運藏喺細節：準時、覆得清楚、帶備雨傘嗰類。大喜大悲唔係今日主題。",
@@ -322,6 +367,7 @@
     },
     {
       id: "patience-token",
+      topics: ["general", "travel"],
       glyph: "⏳",
       title: "耐心代幣",
       reading: "等多一陣往往更啱。今日逼出來嘅答案未必最好；畀過程多半日發酵。",
@@ -329,6 +375,7 @@
     },
     {
       id: "courage-sip",
+      topics: ["general", "travel"],
       glyph: "🧋",
       title: "勇氣一口",
       reading: "你差嘅可能只係一口勇氣。細挑戰先：發言、報名、問價——細步都算前進。",
@@ -336,6 +383,7 @@
     },
     {
       id: "home-nest",
+      topics: ["rest"],
       glyph: "🏠",
       title: "屋企築巢",
       reading: "適合留喺舒適圈充電：煮啲簡單、換床單、或者純粹躺平發夢。社交可以改日。",
@@ -343,6 +391,7 @@
     },
     {
       id: "morning-light",
+      topics: ["general", "rest"],
       glyph: "☀",
       title: "朝早薄光",
       reading: "若你起得早，今日前段效率特別好。捉住清晨做最難嗰件，午後就可以鬆啲。",
@@ -350,6 +399,7 @@
     },
     {
       id: "evening-wind-down",
+      topics: ["rest", "general"],
       glyph: "🌇",
       title: "黃昏收線",
       reading: "傍晚適合收工收心。列低『明日先做』，今日就放手；瞓得好，聽日先有氣場。",
@@ -357,6 +407,7 @@
     },
     {
       id: "laugh-reset",
+      topics: ["social", "general"],
       glyph: "😄",
       title: "笑完重置",
       reading: "正經太耐會繃緊。今日准許自己傻傻地笑一輪；情緒重置之後，判斷會準啲。",
@@ -364,6 +415,7 @@
     },
     {
       id: "no-compare",
+      topics: ["digital", "general"],
       glyph: "⚖",
       title: "唔好比較",
       reading: "見到人哋高光好易焦慮。今日提醒：你睇到嘅係精華剪輯；返返自己節奏就得。",
@@ -371,6 +423,7 @@
     },
     {
       id: "tiny-win",
+      topics: ["general", "work"],
       glyph: "🏅",
       title: "細細勝利",
       reading: "大目標太遠就收割小勝利。寄出、覆完、出門準時——每件都值得在心裡鼓掌。",
@@ -378,6 +431,7 @@
     },
     {
       id: "weather-ok",
+      topics: ["travel", "general"],
       glyph: "☂",
       title: "天氣隨緣",
       reading: "外面點都好，心態可以自備遮同防曬。今日少投訴天氣，多問自己『我可以點舒服啲』。",
@@ -385,6 +439,7 @@
     },
     {
       id: "notebook-friend",
+      topics: ["general", "rest"],
       glyph: "📓",
       title: "筆記做朋友",
       reading: "腦入面轉圈嘅嘢，寫出嚟會停低。唔使靚字；亂寫都係同自己傾偈。",
@@ -1197,9 +1252,52 @@
     els.locked.hidden = name !== "locked";
   }
 
+  /** Free local topic keywords — no AI / no paid API. */
+  const TOPIC_KEYWORDS = {
+    travel: /旅行|旅遊|出差|出國|出埠|去旅行|機票|機場|酒店|旅館|住宿|簽證|護照|行李|背包|自由行|跟團|度假|渡假|景點|打卡遊|名古屋|東京|大阪|京都|北海道|台灣|日本|韓國|泰國|歐洲|美國|\bhotel\b|\bflight\b|\bairport\b|\btravel\b|\btrip\b|\bvisa\b|\bpassport\b|\bluggage\b|\bnagoya\b|\btokyo\b|\bosaka\b/i,
+    money: /錢|金錢|財運|理財|儲蓄|存款|投資|股票|基金|保險|保單|保費|薪水|人工|出糧|薪金|工資|學費|租金|按揭|貸款|卡數|開支|消費|買唔買|抵唔抵|平唔平|貴唔貴|\bbudget\b|\bsalary\b|\binsurance\b|\binvest\b|\bmoney\b|\bprice\b|\bcost\b|\bpay\b/i,
+    work: /打工|上班|返工|放工|職場|同事|老闆|老細|會議|deadline|死線|加班|\bOT\b|inbox|performance|interview|面試|轉工|辭職|\bproject\b|專案|報告|\bKPI\b|工作/i,
+    romance: /戀愛|愛情|姻緣|拍拖|分手|暗戀|心動|表白|約會|男女朋友|伴侶|另一半|\bcrush\b|\blove\b|\bdate\b|\bdating\b|\brelationship\b/i,
+    social: /朋友|友情|聚會|約人|社交|人際|見面|傾偈|傾計|同學|\bfriend\b|\bparty\b|\bgather\b/i,
+    rest: /休息|瞓覺|瞓唔著|疲倦|好攰|壓力|焦慮|健康|身體|運動|散步|冥想|放假|\bholiday\b|\brest\b|\bsleep\b|\btired\b|\bstress\b|\brelax\b/i,
+    digital: /電話|手機|WhatsApp|訊息|短訊|傳訊|回覆|覆訊|Instagram|\bIG\b|Facebook|\bFB\b|群組|通知|刷機|上網|\bemail\b|\btext\b|\bmessage\b|\bdm\b/i
+  };
+
+  const THEME_TOPICS = {
+    "打工": ["work"],
+    "姻緣心情": ["romance"],
+    "今日氣場": [],
+    "今日食咩": ["food"]
+  };
+
   function isFoodAsk(question, theme) {
     if ((theme || "") === "今日食咩") return true;
     return /食|餐|餸|餓|肚餓|開餐|宵夜|早餐|午餐|晚餐|下午茶|飲茶|點心|外賣|煮飯|煮餐|菜單|餐單|eat/i.test(question || "");
+  }
+
+  function detectTopics(question, theme) {
+    const q = question || "";
+    const found = [];
+    const keys = Object.keys(TOPIC_KEYWORDS);
+    for (let i = 0; i < keys.length; i++) {
+      const topic = keys[i];
+      if (TOPIC_KEYWORDS[topic].test(q)) found.push(topic);
+    }
+    const themeExtra = THEME_TOPICS[theme || ""] || [];
+    for (let j = 0; j < themeExtra.length; j++) {
+      const t = themeExtra[j];
+      if (t !== "food" && found.indexOf(t) === -1) found.push(t);
+    }
+    return found;
+  }
+
+  function readingMatchesTopics(item, topics) {
+    if (!topics || !topics.length) return true;
+    const tags = item.topics || ["general"];
+    for (let i = 0; i < topics.length; i++) {
+      if (tags.indexOf(topics[i]) !== -1) return true;
+    }
+    return false;
   }
 
   function recentAvoidIds() {
@@ -1224,13 +1322,37 @@
     return avoid;
   }
 
-  function pickReading(question, theme) {
-    const pool = isFoodAsk(question, theme) ? FOOD_READINGS : READINGS;
-    const avoid = recentAvoidIds();
+  function pickFromPool(pool, avoid) {
     let candidates = pool.filter(function (item) { return !avoid.has(item.id); });
     if (!candidates.length) candidates = pool.slice();
+    if (!candidates.length) return null;
     const idx = Math.floor(Math.random() * candidates.length);
     return candidates[idx];
+  }
+
+  function pickReading(question, theme) {
+    if (isFoodAsk(question, theme)) {
+      return pickFromPool(FOOD_READINGS, recentAvoidIds());
+    }
+    const avoid = recentAvoidIds();
+    const topics = detectTopics(question, theme);
+    // Quirky / no keyword hit → full general pool (still anti-repeat). Never force a topic.
+    if (!topics.length) {
+      return pickFromPool(READINGS, avoid);
+    }
+    const aligned = READINGS.filter(function (item) {
+      return readingMatchesTopics(item, topics);
+    });
+    let picked = pickFromPool(aligned, avoid);
+    if (picked) return picked;
+    // Soft fallback: prefer general-tagged, then full pool
+    const generalish = READINGS.filter(function (item) {
+      const tags = item.topics || [];
+      return tags.indexOf("general") !== -1;
+    });
+    picked = pickFromPool(generalish, avoid);
+    if (picked) return picked;
+    return pickFromPool(READINGS, avoid);
   }
 
   function alignReading(state) {
