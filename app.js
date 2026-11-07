@@ -107,7 +107,7 @@
       id: "bright-coin",
       glyph: "🪙",
       title: "亮亮小幣",
-      reading: "小確幸會以『慳到時間／錢／心機』嘅形式出現。留意細節，會發現自己其實好會打理生活。",
+      reading: "小確幸以『慳到時間／錢／心機』嘅形式出現。留意細節，會發現自己其實好會打理生活。",
       nudge: "獎勵自己一件平而開心嘅嘢。"
     },
     {
@@ -130,9 +130,267 @@
       title: "心裡指南",
       reading: "外面聲音好多，但身體同直覺會提點你。覺得累就休，覺得對就試；今日跟感覺行。",
       nudge: "問自己：邊樣令我輕鬆啲？"
+    },
+    {
+      id: "office-breeze",
+      glyph: "🖥",
+      title: "工位微風",
+      reading: "打工氣場偏順但唔係爆發日。適合清 inbox、寫清楚、一次搞掂一件；唔好一次開十個 tab。",
+      nudge: "今日只追一單最緊要。"
+    },
+    {
+      id: "deadline-soft",
+      glyph: "⏰",
+      title: "死線軟著陸",
+      reading: "有壓力唔代表要硬撐。拆細步驟、提早交一截，反而有餘地呼吸。呢個只係娛樂提醒。",
+      nudge: "寫低三步就開波。"
+    },
+    {
+      id: "meeting-pause",
+      glyph: "🎙",
+      title: "會前一息",
+      reading: "今日傾事前，畀自己三十秒整理重點。講少啲廢話、聽多啲，會顯得更穩陣。",
+      nudge: "開會前喝口水先。"
+    },
+    {
+      id: "inbox-zero-ish",
+      glyph: "📥",
+      title: "半個清空",
+      reading: "唔使追求完美清空。揀五封最阻住你嘅覆完，已經算今日大勝。",
+      nudge: "覆完就關通知半小時。"
+    },
+    {
+      id: "colleague-tea",
+      glyph: "🧋",
+      title: "工友一杯",
+      reading: "職場人際適合輕輕維護：請杯嘢飲、講句多謝，已夠用。唔使硬做社交達人。",
+      nudge: "今日主動講一次『多謝晒』。"
+    },
+    {
+      id: "after-work-border",
+      glyph: "🚪",
+      title: "放工界線",
+      reading: "今日適合畫一條溫柔界線：放工後唔即刻回工訊。休息都係生產力一部分（娛樂講法）。",
+      nudge: "返到屋企先換件衫再睇電話。"
+    },
+    {
+      id: "slow-crush",
+      glyph: "💌",
+      title: "慢熱心動",
+      reading: "姻緣心情偏慢熱。唔使急住定性；多留意對方細微善意，自己都真誠就好。",
+      nudge: "回覆可以溫柔，唔使急住長篇。"
+    },
+    {
+      id: "self-date",
+      glyph: "🪞",
+      title: "同自己約會",
+      reading: "今日最穩陣係對自己好啲。單身定拍緊拖都一樣：先把自己情緒安頓好，先有多餘去愛人。",
+      nudge: "安排一件只為自己開心嘅小事。"
+    },
+    {
+      id: "text-courage",
+      glyph: "📱",
+      title: "傳訊小勇",
+      reading: "想講嘅說話可能卡喺草稿。精簡一句真心話就夠；今日唔適合寫長篇辯論。",
+      nudge: "傳完就放低電話五分鐘。"
+    },
+    {
+      id: "warm-boundary",
+      glyph: "🛡",
+      title: "溫柔界線",
+      reading: "關係入面可以溫柔拒絕。講『今日唔得，但我想改日』，已經係成熟同關心。",
+      nudge: "練習一句唔傷人嘅『唔好意思』。"
+    },
+    {
+      id: "old-playlist",
+      glyph: "🎧",
+      title: "舊歌翻熱",
+      reading: "日常情緒會被一首舊歌輕輕拉返正面。畀自己沉浸十分鐘，唔使解釋點解開心。",
+      nudge: "播返你熟悉嗰張歌單。"
+    },
+    {
+      id: "tidy-corner",
+      glyph: "🧹",
+      title: "一角整齊",
+      reading: "環境亂，心都會嘈。今日只執一個角落：枱面、背包或者相簿，已經夠清爽。",
+      nudge: "計時十五分鐘，時間到就停。"
+    },
+    {
+      id: "walk-loop",
+      glyph: "🚶",
+      title: "行個圈",
+      reading: "卡住就行。唔使跑遠；樓下轉兩圈，腦會自動換氣，好多『大件事』會變細。",
+      nudge: "唔帶耳機都試吓，聽吓周圍。"
+    },
+    {
+      id: "nap-permission",
+      glyph: "😴",
+      title: "准假小睡",
+      reading: "今日氣場偏休息向。二十分鐘小休好過硬撐到頭痕；醒返先再處理難題。",
+      nudge: "定鬧鐘，唔好一瞓就通宵。"
+    },
+    {
+      id: "screen-dim",
+      glyph: "🔅",
+      title: "螢幕調暗",
+      reading: "資訊太多會令選擇困難。今日適合減少刷 feed，專心一件眼前事，效率反而升。",
+      nudge: "睡前一小時少睇刺眼藍光。"
+    },
+    {
+      id: "stretch-reset",
+      glyph: "🧘",
+      title: "伸展重置",
+      reading: "身體提點你停低。膊頭、腰、眼都要休息；三分鐘伸展已經係對自己負責。",
+      nudge: "企起身望遠方二十秒。"
+    },
+    {
+      id: "friend-checkin",
+      glyph: "🗣",
+      title: "朋友報到",
+      reading: "社交唔使盛大。一句『食咗未』『忙唔忙』，已經維持住連結。今日適合輕量聯絡。",
+      nudge: "揀一個好耐冇傾嘅人報到。"
+    },
+    {
+      id: "small-gather",
+      glyph: "🍽",
+      title: "細聚剛好",
+      reading: "大型局可能攰；兩三個人傾偈反而更對題。質素高過人數。",
+      nudge: "約個短局，講明『一小時都得』。"
+    },
+    {
+      id: "listen-mode",
+      glyph: "👂",
+      title: "聽多講少",
+      reading: "今日你嘅價值可能係聽。畀人講完，再問一句跟進，關係會暖咗一截。",
+      nudge: "對話入面少插咀一次。"
+    },
+    {
+      id: "group-chat-mute",
+      glyph: "🔕",
+      title: "群組靜音",
+      reading: "社交能量有限。暫時靜音嘈群組唔係絕交，係保護注意力；有重要會有人私訊你。",
+      nudge: "今日只回真正需要你嘅對話。"
+    },
+    {
+      id: "pocket-change",
+      glyph: "💵",
+      title: "袋裡零錢",
+      reading: "錢途話題今日只適合輕描淡寫：留意小開支、記低一筆都得。唔係投資建議，純娛樂心情牌。",
+      nudge: "今日買嘢前停三秒問『真係要？』。"
+    },
+    {
+      id: "receipt-tidy",
+      glyph: "🧾",
+      title: "單據收拾",
+      reading: "適合整理帳目同訂閱。發現多餘支出會有種『執返把米』嘅爽；同樣只係生活娛樂提示。",
+      nudge: "取消一個你唔再用嘅訂閱都得。"
+    },
+    {
+      id: "value-over-price",
+      glyph: "🏷",
+      title: "抵唔抵心水",
+      reading: "今日買嘢睇『值唔值得開心』多過平唔平。一件用得著嘅，好過一堆閒置。",
+      nudge: "購物清單只留三項。"
+    },
+    {
+      id: "side-hustle-seed",
+      glyph: "🌱",
+      title: "副業一粒種",
+      reading: "若你有小念頭，今日只適合落一粒種子：筆記、草圖、問一個人。唔使即刻變生意。",
+      nudge: "寫低『下一步最小動作』。"
+    },
+    {
+      id: "aura-glow",
+      glyph: "🌟",
+      title: "氣場微光",
+      reading: "今日整體氣場平穩偏亮。唔使強求大運；做好本分、對人客氣，已經好睇。",
+      nudge: "出門整理一下儀容，心情會跟住升。"
+    },
+    {
+      id: "fog-lift",
+      glyph: "🌤",
+      title: "霧氣散開",
+      reading: "早段可能矇查查，午後會清楚啲。重要事先排後段，或者分段做，會順啲。",
+      nudge: "難題留到你精神最好嗰段。"
+    },
+    {
+      id: "lucky-detail",
+      glyph: "🔎",
+      title: "細節小運",
+      reading: "好運藏喺細節：準時、覆得清楚、帶備雨傘嗰類。大喜大悲唔係今日主題。",
+      nudge: "檢查返明日要用嘅嘢。"
+    },
+    {
+      id: "patience-token",
+      glyph: "⏳",
+      title: "耐心代幣",
+      reading: "等多一陣往往更啱。今日逼出來嘅答案未必最好；畀過程多半日發酵。",
+      nudge: "想即時回覆嘅，先存草稿。"
+    },
+    {
+      id: "courage-sip",
+      glyph: "🧋",
+      title: "勇氣一口",
+      reading: "你差嘅可能只係一口勇氣。細挑戰先：發言、報名、問價——細步都算前進。",
+      nudge: "今日只做一件『有啲驚但安全』嘅事。"
+    },
+    {
+      id: "home-nest",
+      glyph: "🏠",
+      title: "屋企築巢",
+      reading: "適合留喺舒適圈充電：煮啲簡單、換床單、或者純粹躺平發夢。社交可以改日。",
+      nudge: "整返個舒服角落畀自己。"
+    },
+    {
+      id: "morning-light",
+      glyph: "☀",
+      title: "朝早薄光",
+      reading: "若你起得早，今日前段效率特別好。捉住清晨做最難嗰件，午後就可以鬆啲。",
+      nudge: "起床後先飲水再掂電話。"
+    },
+    {
+      id: "evening-wind-down",
+      glyph: "🌇",
+      title: "黃昏收線",
+      reading: "傍晚適合收工收心。列低『明日先做』，今日就放手；瞓得好，聽日先有氣場。",
+      nudge: "寫三件『今日夠喇』再瞓。"
+    },
+    {
+      id: "laugh-reset",
+      glyph: "😄",
+      title: "笑完重置",
+      reading: "正經太耐會繃緊。今日准許自己傻傻地笑一輪；情緒重置之後，判斷會準啲。",
+      nudge: "同可靠嘅人分享一件搞笑事。"
+    },
+    {
+      id: "no-compare",
+      glyph: "⚖",
+      title: "唔好比較",
+      reading: "見到人哋高光好易焦慮。今日提醒：你睇到嘅係精華剪輯；返返自己節奏就得。",
+      nudge: "刷完動態就伸懶腰離開。"
+    },
+    {
+      id: "tiny-win",
+      glyph: "🏅",
+      title: "細細勝利",
+      reading: "大目標太遠就收割小勝利。寄出、覆完、出門準時——每件都值得在心裡鼓掌。",
+      nudge: "今晚列低今日三件做到嘅事。"
+    },
+    {
+      id: "weather-ok",
+      glyph: "☂",
+      title: "天氣隨緣",
+      reading: "外面點都好，心態可以自備遮同防曬。今日少投訴天氣，多問自己『我可以點舒服啲』。",
+      nudge: "出門前睇一眼天氣就夠。"
+    },
+    {
+      id: "notebook-friend",
+      glyph: "📓",
+      title: "筆記做朋友",
+      reading: "腦入面轉圈嘅嘢，寫出嚟會停低。唔使靚字；亂寫都係同自己傾偈。",
+      nudge: "寫五句『而家我覺得…』。"
     }
   ];
-
 
   const FOOD_READINGS = [
     {
@@ -190,6 +448,118 @@
       title: "家常一碟",
       reading: "簡單家常味道會更舒服：白飯、碟熟菜、或者屋企口味。唔使為咗『食咩好』而複雜化。",
       nudge: "返屋企食，或者叫平時那款都得。"
+    },
+    {
+      id: "food-cha-chaan",
+      glyph: "🍞",
+      title: "茶記經典",
+      reading: "今日適合茶餐廳那套：奶茶、多士、扒餐或者常餐。快捷穩陣，唔使研究打卡位。",
+      nudge: "點你平時嗰款就好。"
+    },
+    {
+      id: "food-congee",
+      glyph: "🥣",
+      title: "粥粉親密",
+      reading: "胃口一般就選粥、粉、麵輕食。易入口、少抉擇，適合想靜靜食一餐嘅日子。",
+      nudge: "加隻蛋或者青菜已經夠豐富。"
+    },
+    {
+      id: "food-siu-mei",
+      glyph: "🍖",
+      title: "燒味解饞",
+      reading: "想香口可以考慮燒味配飯、或者熟悉嘅烤肉類。適量就好；娛樂提示唔係叫你暴食。",
+      nudge: "配碟青菜，平衡啲更舒服。"
+    },
+    {
+      id: "food-seafood-light",
+      glyph: "🦐",
+      title: "海味清蒸",
+      reading: "今日口味可偏清蒸海鮮或蒸蛋蒸肉餅嗰類。少油少醬，食完身會輕啲嘅感覺。",
+      nudge: "唔使大餐，小份已經啱。"
+    },
+    {
+      id: "food-spicy-careful",
+      glyph: "🌶",
+      title: "微辣提神",
+      reading: "想醒神可以微辣：麻辣燙、咖哩、或者加少少辣椒。知自己胃唔掂就減辣，聽身體。",
+      nudge: "辣完記得飲夠水。"
+    },
+    {
+      id: "food-dimsum",
+      glyph: "🥟",
+      title: "點心節奏",
+      reading: "適合嘆茶食點心、或者外賣小籠包燒賣。細件多樣，邊食邊傾，氣氛會好。",
+      nudge: "唔好一次叫到滿枱。"
+    },
+    {
+      id: "food-street",
+      glyph: "🌮",
+      title: "街頭小食",
+      reading: "今日可以街邊小食頂住：魚蛋、雞蛋仔、壽司卷之類。解饞為主，之後再補正餐都得。",
+      nudge: "企喺檔口食完就走，都係一種儀式。"
+    },
+    {
+      id: "food-veggie-day",
+      glyph: "🥦",
+      title: "綠意一餐",
+      reading: "想清新可以多菜少肉：沙律、煮菜飯、又或者純素選擇。跟喜好，唔使勉強。",
+      nudge: "加蛋白質（蛋豆奶）更有飽腹感。"
+    },
+    {
+      id: "food-hotpot-share",
+      glyph: "🍲",
+      title: "火鍋圍爐",
+      reading: "人多適合火鍋／麻辣燙／一人鍋。邊煮邊傾，今日主題係一齊暖胃多過精緻擺盤。",
+      nudge: "先湯底後肉，唔好一次撈晒。"
+    },
+    {
+      id: "food-breakfast-all",
+      glyph: "🍳",
+      title: "早餐思維",
+      reading: "無論幾點，都可以用『早餐邏輯』：簡單、熟口、快手。三明治、粥、蛋治都得。",
+      nudge: "唔好空腹做大事，先墊啲嘢。"
+    },
+    {
+      id: "food-leftover-magic",
+      glyph: "🍱",
+      title: "隔夜魔法",
+      reading: "雪櫃有貨就變陣：翻熱、加蛋、配飯。慳錢慳時間，都係今日小確幸（純娛樂）。",
+      nudge: "加熱要熱透，食得安心。"
+    },
+    {
+      id: "food-soup-first",
+      glyph: "🥘",
+      title: "先喝口湯",
+      reading: "一餐由湯開始會穩陣啲：例湯、清湯、或者即沖都得。暖胃之後先決定主食。",
+      nudge: "湯唔使貴，暖就得。"
+    },
+    {
+      id: "food-delivery-ok",
+      glyph: "🛵",
+      title: "外賣無罪",
+      reading: "今日攰就叫外賣，唔使自責。揀熟悉店、少選症，食完洗碗都交畀未來嘅你。",
+      nudge: "收藏店只留三間，點得快。"
+    },
+    {
+      id: "food-fruit-cut",
+      glyph: "🍎",
+      title: "果切補水",
+      reading: "正餐之間可以果切、豆腐花、或者清飲料頂住。輕食唔係紀律訓練，係聽口渴同想清爽。",
+      nudge: "切好放雪櫃，伸手就有。"
+    },
+    {
+      id: "food-comfort-carb",
+      glyph: "🥐",
+      title: "碳水安慰",
+      reading: "情緒需要安慰劑時，麵包、飯、粉都可以。適量開心就得；呢度唔提供飲食治療建議。",
+      nudge: "配蛋白質或蔬菜，飽得更久。"
+    },
+    {
+      id: "food-late-night-soft",
+      glyph: "🌙",
+      title: "宵夜從輕",
+      reading: "若真係肚餓先宵夜：粥、麵、牛奶餅乾嗰類輕食。唔好太油太撐，瞓得會好啲。",
+      nudge: "食完刷刷牙再瞓。"
     }
   ];
 
@@ -778,6 +1148,7 @@
     if (!state || !state.reading) return;
     const row = {
       date: state.date,
+      id: state.reading.id || "",
       glyph: state.reading.glyph,
       title: (state.reading.title || "") + "（再開前）",
       theme: state.theme || DEFAULT_THEME,
@@ -831,16 +1202,35 @@
     return /食|餐|餸|餓|肚餓|開餐|宵夜|早餐|午餐|晚餐|下午茶|飲茶|點心|外賣|煮飯|煮餐|菜單|餐單|eat/i.test(question || "");
   }
 
+  function recentAvoidIds() {
+    const avoid = new Set();
+    const hist = loadHistory().slice(0, 7);
+    const all = READINGS.concat(FOOD_READINGS);
+    for (let i = 0; i < hist.length; i++) {
+      const row = hist[i];
+      if (row && row.id) {
+        avoid.add(row.id);
+        continue;
+      }
+      if (row && row.title) {
+        const hit = all.find(function (item) { return item.title === row.title; });
+        if (hit) avoid.add(hit.id);
+      }
+    }
+    try {
+      const cur = loadState();
+      if (cur && cur.reading && cur.reading.id) avoid.add(cur.reading.id);
+    } catch (e) { /* ignore */ }
+    return avoid;
+  }
+
   function pickReading(question, theme) {
     const pool = isFoodAsk(question, theme) ? FOOD_READINGS : READINGS;
-    const day = todayKey();
-    let hash = 0;
-    const seed = day + "|" + (question || "") + "|" + (theme || "");
-    for (let i = 0; i < seed.length; i++) {
-      hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-    }
-    hash = (hash + Math.floor(Math.random() * 9973)) % pool.length;
-    return pool[hash];
+    const avoid = recentAvoidIds();
+    let candidates = pool.filter(function (item) { return !avoid.has(item.id); });
+    if (!candidates.length) candidates = pool.slice();
+    const idx = Math.floor(Math.random() * candidates.length);
+    return candidates[idx];
   }
 
   function alignReading(state) {
@@ -868,6 +1258,7 @@
     if (!state || !state.reading) return;
     const row = {
       date: state.date,
+      id: state.reading.id || "",
       glyph: state.reading.glyph,
       title: state.reading.title,
       theme: state.theme || DEFAULT_THEME,

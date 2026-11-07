@@ -30,7 +30,7 @@ cd /workspace/daily-draw && python3 -m http.server 8765
 |------|------|
 | `index.html` | 頁面結構 |
 | `styles.css` | 夜間神秘風樣式（手機優先） |
-| `app.js` | 抽牌動畫、18 則原創解讀、每日鎖定、複製文案 |
+| `app.js` | 抽牌動畫、55 則原創解讀、24 則食咩、近期唔重複、每日鎖定、複製文案 |
 
 ## MVP 行為
 
