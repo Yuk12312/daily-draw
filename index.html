@@ -31,7 +31,7 @@
   <main class="app">
     <aside class="desk-aside" aria-hidden="false">
       <p class="desk-kicker">✦ 粵語輕量娛樂</p>
-      <p>每日一抽，停一停睇下今日氣場。唔使註冊，結果卡可以下載同分享。</p>
+      <p>每日一抽，停一停睇下今日氣場。訪客都得；登入後再開次數可跟帳號。結果卡可以下載同分享。</p>
       <p>本站內容僅供娛樂，唔構成人生、感情、財務或健康建議。</p>
     </aside>
 
@@ -40,6 +40,10 @@
       <p class="brand-mark">✦</p>
       <h1 class="brand-name">每日一抽</h1>
       <p class="brand-tag">今日一念 · 輕鬆睇下</p>
+      <div class="account-bar">
+        <span class="account-chip" id="account-chip">訪客</span>
+        <button type="button" class="btn-account" id="btn-account">登入／註冊</button>
+      </div>
     </header>
 
     <section id="view-home" class="view" hidden>
@@ -47,8 +51,8 @@
         <p class="hook-kicker">今日未抽？</p>
         <h2 class="hook-title">停一停，抽一張<br />睇下今日氣場</h2>
         <p class="hook-body">
-          唔使註冊、唔使登入。<br />
-          每個裝置每日一抽，聽日零晨重置。<br />
+          訪客都得，唔使登入；登入後再開次數可跟帳號。<br />
+          每個裝置每日免費一抽，聽日零晨重置。<br />
           抽完可以下載結果卡，傳 WhatsApp 或者加 IG Story。
         </p>
         <p class="chip-label">今日想睇邊方面？</p>
@@ -111,24 +115,24 @@
         <div class="action-row">
           <button type="button" class="btn btn-primary" id="btn-share">分享</button>
           <button type="button" class="btn btn-secondary" id="btn-download">下載結果卡</button>
-</div>
-        <div class="play-on" id="play-on">
-          <p class="play-kicker">抽完未完</p>
-          <p class="play-lead">今日可以做一件細事（純娛樂，無獎賞）</p>
-          <div class="act-list" id="act-list"></div>
-          <label class="note-label" for="today-note">寫低一句今日感受（只存在呢部裝置）</label>
-          <textarea id="today-note" class="today-note" rows="2" maxlength="120" placeholder="例如：其實我只係想食得簡單啲"></textarea>
-          <p class="note-saved" id="note-saved" hidden>已記住</p>
-          <div class="history-box" id="history-box" hidden>
-            <p class="play-lead">你近期抽過</p>
-            <ul class="history-list" id="history-list"></ul>
-          </div>
         </div>
+        <div class="history-box" id="history-box" hidden>
+          <p class="history-lead">你近期抽過</p>
+          <ul class="history-list" id="history-list"></ul>
+        </div>
+        <p class="login-soft" id="login-soft" hidden>登入後再開次數可跟住帳號（可選，唔強制）。</p>
         <aside class="tip-box" id="tip-box">
-          <p class="tip-kicker">自願打賞</p>
-          <p class="tip-copy">如果今日結果對你有啟發，可以請我飲杯咖啡。打賞唔影響解讀，亦唔係改運或專業諮詢。</p>
-          <img class="tip-qr" src="alipay-tip.png" width="200" height="200" alt="支付寶香港打賞二維碼" />
-          <a class="btn btn-secondary" id="btn-tip" href="https://qr.alipay.hk/281004010497PhF29hbEB9gU2C7QWfj8Z1aW" target="_blank" rel="noopener noreferrer">用支付寶打賞</a>
+          <p class="tip-kicker">打賞支持 · 娛樂再開</p>
+          <p class="tip-copy">自願打賞後可再抽一次娛樂結果；唔保證命運改變；系統驗唔到付款。唔係專業諮詢。</p>
+          <p class="luck-status" id="luck-status" hidden></p>
+          <button type="button" class="btn btn-primary" id="btn-luck-open">打賞支持 · 今日再開一次</button>
+          <div class="luck-panel" id="luck-panel" hidden>
+            <img class="tip-qr" src="alipay-tip.png" width="200" height="200" alt="支付寶香港打賞二維碼" />
+            <a class="btn btn-secondary" id="btn-tip" href="https://qr.alipay.hk/281004010497PhF29hbEB9gU2C7QWfj8Z1aW" target="_blank" rel="noopener noreferrer">用支付寶打賞</a>
+            <button type="button" class="btn btn-primary" id="btn-luck-confirm">我已打賞，再開一次</button>
+            <p class="luck-disclaimer">系統驗唔到付款，請誠實撳確認。每日最多再開 3 次；打賞自願；僅供娛樂。</p>
+          </div>
+          <button type="button" class="btn btn-secondary" id="btn-luck-redraw" hidden>立即再開一次</button>
         </aside>
         <button type="button" class="btn btn-ghost" id="btn-copy">複製結果文案</button>
         <p class="comeback" id="comeback-msg">聽日再嚟抽啦 🌙 · 想收藏？下載結果卡</p>
@@ -141,8 +145,22 @@
       <div class="locked-wrap">
         <p class="locked-emoji" aria-hidden="true">🌙</p>
         <h2 class="locked-title">今日已經抽過喇</h2>
-        <p class="locked-body">每個裝置每日一抽，聽日零晨重置。<br />抽完都可以寫感受、剔一件細事，或者睇返舊日結果。</p>
+        <p class="locked-body">每個裝置每日免費一抽，聽日零晨重置。<br />可以睇返今日結果，或者打賞支持再開一次。</p>
         <button type="button" class="btn btn-primary" id="btn-show-today">睇返今日結果</button>
+        <p class="login-soft" id="login-soft-locked" hidden>登入後再開次數可跟住帳號（可選，唔強制）。</p>
+        <aside class="tip-box tip-box-locked" id="tip-box-locked">
+          <p class="tip-kicker">打賞支持 · 娛樂再開</p>
+          <p class="tip-copy">自願打賞後可再抽一次娛樂結果；唔保證命運改變；系統驗唔到付款。</p>
+          <p class="luck-status" id="luck-status-locked" hidden></p>
+          <button type="button" class="btn btn-primary" id="btn-luck-open-locked">打賞支持 · 今日再開一次</button>
+          <div class="luck-panel" id="luck-panel-locked" hidden>
+            <img class="tip-qr" src="alipay-tip.png" width="200" height="200" alt="支付寶香港打賞二維碼" />
+            <a class="btn btn-secondary" href="https://qr.alipay.hk/281004010497PhF29hbEB9gU2C7QWfj8Z1aW" target="_blank" rel="noopener noreferrer">用支付寶打賞</a>
+            <button type="button" class="btn btn-primary" id="btn-luck-confirm-locked">我已打賞，再開一次</button>
+            <p class="luck-disclaimer">系統驗唔到付款，請誠實撳確認。每日最多再開 3 次；打賞自願；僅供娛樂。</p>
+          </div>
+          <button type="button" class="btn btn-secondary" id="btn-luck-redraw-locked" hidden>立即再開一次</button>
+        </aside>
         <p class="comeback">聽日再嚟 ✨</p>
       </div>
     </section>
@@ -156,6 +174,45 @@
   </main>
 
   <div class="toast" id="toast" hidden role="status"></div>
+  <div class="auth-modal" id="auth-modal" hidden>
+    <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <button type="button" class="auth-close" id="auth-close" aria-label="關閉">×</button>
+      <h2 class="auth-title" id="auth-title">帳號</h2>
+      <p class="auth-hint" id="auth-hint">用電郵註冊或登入；再開次數可跟住帳號（僅供娛樂）。</p>
+      <p class="auth-status" id="auth-status">未登入 · 訪客進度只喺呢部裝置</p>
+      <div id="auth-guest">
+        <label class="auth-label" for="auth-email">電郵</label>
+        <input id="auth-email" class="auth-input" type="email" autocomplete="username" placeholder="you@example.com" />
+        <label class="auth-label" for="auth-pass">密碼（至少 6 個字）</label>
+        <input id="auth-pass" class="auth-input" type="password" autocomplete="current-password" placeholder="••••••••" />
+        <p class="auth-error" id="auth-error" hidden></p>
+        <div class="auth-actions">
+          <button type="button" class="btn btn-primary" id="btn-signin">登入</button>
+          <button type="button" class="btn btn-secondary" id="btn-signup">註冊</button>
+        </div>
+      </div>
+      <div id="auth-user" hidden>
+        <p class="auth-email-line" id="auth-email-line"></p>
+        <button type="button" class="btn btn-secondary" id="btn-signout">登出</button>
+      </div>
+      <p class="auth-fine">登入可選。訪客一樣可以每日免費抽同打賞再開。內容僅供娛樂。</p>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script>
+    window.FIREBASE_CONFIG = {
+      apiKey: "AIzaSyBndIv5dArprmwgt_D4V-cMmWn0nqC-mAg",
+      authDomain: "pixel-adventure-rpg.firebaseapp.com",
+      projectId: "pixel-adventure-rpg",
+      storageBucket: "pixel-adventure-rpg.firebasestorage.app",
+      messagingSenderId: "877872540453",
+      appId: "1:877872540453:web:2165ae555316e833ea48cc",
+      measurementId: "G-GB46QC8CZK"
+    };
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="app.js"></script>
 </body>
