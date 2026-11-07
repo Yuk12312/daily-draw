@@ -503,6 +503,7 @@ body {
   border-radius: 999px;
   font-size: 0.88rem;
   z-index: 20;
+  pointer-events: none;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   animation: fadeUp 0.25s ease;
 }
@@ -657,68 +658,21 @@ body {
 }
 
 
-/* After-draw play */
-.play-on {
-  margin-top: 20px;
-  padding: 16px 14px 18px;
-  border-radius: 18px;
-  border: 1px solid rgba(201, 168, 255, 0.22);
-  background: rgba(20, 18, 37, 0.65);
-}
-.play-kicker {
-  margin: 0 0 6px;
-  color: #e8c97a;
-  letter-spacing: 0.14em;
-  font-size: 0.75rem;
-}
-.play-lead {
-  margin: 0 0 12px;
-  color: #f4f0ff;
-  font-size: 0.98rem;
-}
-.act-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-.act-btn {
-  text-align: left;
-  border: 1px solid rgba(201, 168, 255, 0.28);
-  background: rgba(11, 10, 20, 0.45);
-  color: #e8e0f8;
-  border-radius: 12px;
-  padding: 10px 12px;
-  font: inherit;
-  cursor: pointer;
-}
-.act-btn.is-on {
-  border-color: rgba(232, 201, 122, 0.7);
-  color: #e8c97a;
-}
-.note-label {
-  display: block;
-  margin: 0 0 8px;
-  color: #cfc6e6;
-  font-size: 0.86rem;
-}
-.today-note {
+/* History (separate from tip/share) */
+.history-box {
   width: 100%;
-  box-sizing: border-box;
-  border-radius: 12px;
-  border: 1px solid rgba(201, 168, 255, 0.28);
-  background: rgba(11, 10, 20, 0.55);
+  margin-top: 8px;
+  padding: 14px 12px 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(201, 168, 255, 0.18);
+  background: rgba(20, 18, 37, 0.45);
+  text-align: left;
+}
+.history-lead {
+  margin: 0 0 8px;
   color: #f4f0ff;
-  padding: 10px 12px;
-  font: inherit;
-  resize: vertical;
+  font-size: 0.92rem;
 }
-.note-saved {
-  margin: 8px 0 0;
-  color: #a89bc4;
-  font-size: 0.8rem;
-}
-.history-box { margin-top: 18px; }
 .history-list {
   list-style: none;
   margin: 0;
@@ -733,3 +687,214 @@ body {
   font-size: 0.88rem;
 }
 .history-list .h-glyph { flex: 0 0 auto; }
+
+
+/* Luck / tip redraw */
+.luck-status {
+  margin: 0 0 12px;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+.luck-panel {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.luck-panel[hidden],
+.luck-status[hidden],
+#btn-luck-redraw[hidden],
+#btn-luck-redraw-locked[hidden] {
+  display: none !important;
+}
+.luck-disclaimer {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.tip-box .btn {
+  width: 100%;
+  max-width: 280px;
+  justify-content: center;
+}
+.tip-box-locked {
+  margin-top: 20px;
+  text-align: center;
+}
+.tip-box + .btn,
+.tip-box .btn + .btn {
+  margin-top: 10px;
+}
+#btn-luck-redraw,
+#btn-luck-redraw-locked {
+  margin-top: 12px;
+}
+
+/* Account bar + auth modal */
+.account-bar {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(26, 23, 48, 0.85);
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.account-chip.is-in {
+  color: var(--gold);
+  border-color: rgba(232, 201, 122, 0.35);
+}
+.btn-account {
+  appearance: none;
+  border: 1px solid rgba(201, 168, 255, 0.35);
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.btn-account:hover {
+  background: rgba(201, 168, 255, 0.12);
+}
+
+.login-soft {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.login-soft[hidden] {
+  display: none !important;
+}
+.login-soft button {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--accent-2);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(5, 4, 12, 0.72);
+  backdrop-filter: blur(6px);
+}
+.auth-modal[hidden] {
+  display: none !important;
+}
+.auth-dialog {
+  position: relative;
+  width: min(100%, 360px);
+  padding: 24px 20px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #1c1832 0%, #141225 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+.auth-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.auth-title {
+  margin: 0 0 6px;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--text);
+}
+.auth-hint,
+.auth-status,
+.auth-fine,
+.auth-email-line {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.auth-status {
+  color: var(--gold);
+  font-size: 0.84rem;
+}
+.auth-label {
+  display: block;
+  margin: 10px 0 6px;
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+.auth-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(11, 10, 20, 0.75);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+}
+.auth-input:focus {
+  outline: 2px solid rgba(126, 200, 255, 0.45);
+  outline-offset: 1px;
+}
+.auth-error {
+  margin: 10px 0 0;
+  color: #ffb4b4;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+.auth-error[hidden] {
+  display: none !important;
+}
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.auth-actions .btn,
+#auth-user .btn {
+  width: 100%;
+  justify-content: center;
+}
+#auth-user[hidden],
+#auth-guest[hidden] {
+  display: none !important;
+}
+.auth-fine {
+  margin-top: 16px;
+  margin-bottom: 0;
+  font-size: 0.75rem;
+}
