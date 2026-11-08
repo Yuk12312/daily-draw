@@ -6,6 +6,12 @@
   const AI_DAILY_LIMIT = 5;
   const AI_TIMEOUT_MS = 9000;
   const AI_USAGE_KEY = "daily-draw-ai-usage-v1";
+  /** Firebase emails with unlimited AI (case-insensitive). Add more as needed. */
+  const ADMIN_EMAILS = [
+    "timchoi12@gmail.com"
+  ];
+  /** Guest/admin toggle without Firebase: localStorage.setItem('daily-draw-admin-v1','1') */
+  const ADMIN_FLAG_KEY = "daily-draw-admin-v1";
 
   /** Original light entertainment readings — not based on any copyrighted deck. */
   const READINGS = [
@@ -647,6 +653,7 @@
     resultCard: document.getElementById("result-card"),
     intention: document.getElementById("intention-input"),
     themeChips: document.getElementById("theme-chips"),
+    aiCredits: document.getElementById("ai-credits"),
     streakMsg: document.getElementById("streak-msg"),
     toast: document.getElementById("toast"),
     historyBox: document.getElementById("history-box"),
@@ -841,6 +848,7 @@
         node.innerHTML = softHtml;
       }
     });
+    refreshAiCreditsUI();
   }
 
   function userDocRef() {
@@ -1263,6 +1271,7 @@
     drawTicket += 1;
     drawing = false;
     showView("home");
+    refreshAiCreditsUI();
     try {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (_) {
@@ -1359,24 +1368,55 @@
     }
   }
 
+  function isAdmin() {
+    try {
+      if (localStorage.getItem(ADMIN_FLAG_KEY) === "1") return true;
+    } catch (e) { /* ignore */ }
+    const email = (_fbUser && _fbUser.email ? String(_fbUser.email) : "").trim().toLowerCase();
+    if (!email) return false;
+    return ADMIN_EMAILS.some(function (e) {
+      return String(e || "").trim().toLowerCase() === email;
+    });
+  }
+
   function aiCreditsLeft() {
+    if (isAdmin()) return Infinity;
     return Math.max(0, AI_DAILY_LIMIT - loadAiUsage().count);
   }
 
   function bumpAiUsage() {
+    if (isAdmin()) return; // unlimited — do not count against the daily cap
     const u = loadAiUsage();
     u.date = todayKey();
     u.count = (Number(u.count) || 0) + 1;
     localStorage.setItem(AI_USAGE_KEY, JSON.stringify(u));
   }
 
-  /** Try AI when user typed a custom 一念, or picked a non-default theme chip. */
+  function refreshAiCreditsUI() {
+    if (!els.aiCredits) return;
+    if (isAdmin()) {
+      els.aiCredits.textContent = "Admin · AI 無限";
+      els.aiCredits.classList.add("is-admin");
+      els.aiCredits.classList.remove("is-empty");
+      els.aiCredits.hidden = false;
+      return;
+    }
+    els.aiCredits.classList.remove("is-admin");
+    const left = aiCreditsLeft();
+    if (left <= 0) {
+      els.aiCredits.textContent = "今日一念 AI 額已用完 · 改用牌庫";
+      els.aiCredits.classList.add("is-empty");
+    } else {
+      els.aiCredits.textContent = "今日一念 AI 仲有 " + left + "／" + AI_DAILY_LIMIT + " 次";
+      els.aiCredits.classList.remove("is-empty");
+    }
+    els.aiCredits.hidden = false;
+  }
+
+  /** AI only when user typed a custom 今日一念. Theme chips use the fixed pool. */
   function shouldTryAi(question, theme) {
     const q = normalizeQuestion(question);
-    const t = theme || DEFAULT_THEME;
-    if (q !== DEFAULT_QUESTION) return true;
-    if (t !== DEFAULT_THEME) return true;
-    return false;
+    return q !== DEFAULT_QUESTION;
   }
 
   function normalizeAiReading(raw) {
@@ -1449,6 +1489,7 @@
       };
     }
     if (aiCreditsLeft() <= 0) {
+      refreshAiCreditsUI();
       return {
         reading: pickReading(question, theme),
         source: "keyword",
@@ -1458,6 +1499,7 @@
     const ai = await fetchAiReading(question, theme);
     if (ai.ok && ai.reading) {
       bumpAiUsage();
+      refreshAiCreditsUI();
       return { reading: ai.reading, source: "ai", fallback: null };
     }
     return {
@@ -1707,7 +1749,7 @@
         refreshLuckUI();
         drawing = false;
         if (fallback === "limit" || fallback === "error") {
-          showToast("今日免費 AI 額用完，改用關鍵字對題");
+          showToast("今日一念 AI 額用完，改用牌庫對題");
         } else if (isRedraw) {
           showToast("支持再開完成（娛樂）");
         }
@@ -1915,6 +1957,7 @@
     initFirebase();
     updateAuthUI();
     refreshLuckUI();
+    refreshAiCreditsUI();
   }
 
   if (document.readyState === "loading") {
