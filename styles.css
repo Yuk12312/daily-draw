@@ -493,19 +493,31 @@ body {
 
 .toast {
   position: fixed;
-  left: 50%;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  max-width: calc(100vw - 32px);
+  margin-inline: auto;
   bottom: calc(24px + var(--safe-b));
-  transform: translateX(-50%);
   background: rgba(36, 30, 64, 0.95);
   border: 1px solid var(--line);
   color: var(--text);
   padding: 10px 16px;
   border-radius: 999px;
   font-size: 0.88rem;
+  line-height: 1.45;
+  text-align: center;
+  box-sizing: border-box;
+  white-space: normal;
   z-index: 20;
   pointer-events: none;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  animation: fadeUp 0.25s ease;
+  animation: toastFade 0.25s ease;
+}
+
+@keyframes toastFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

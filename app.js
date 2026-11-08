@@ -2,6 +2,10 @@
   "use strict";
 
   const STORAGE_KEY = "daily-draw-v1";
+  const AI_ENDPOINT = "https://daily-draw-ai.yuk-daily-draw.workers.dev/";
+  const AI_DAILY_LIMIT = 5;
+  const AI_TIMEOUT_MS = 9000;
+  const AI_USAGE_KEY = "daily-draw-ai-usage-v1";
 
   /** Original light entertainment readings — not based on any copyrighted deck. */
   const READINGS = [
@@ -1330,6 +1334,125 @@
     return candidates[idx];
   }
 
+
+  function loadAiUsage() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(AI_USAGE_KEY) || "null");
+      if (!raw || raw.date !== todayKey()) return { date: todayKey(), count: 0 };
+      return { date: raw.date, count: Number(raw.count) || 0 };
+    } catch (e) {
+      return { date: todayKey(), count: 0 };
+    }
+  }
+
+  function aiCreditsLeft() {
+    return Math.max(0, AI_DAILY_LIMIT - loadAiUsage().count);
+  }
+
+  function bumpAiUsage() {
+    const u = loadAiUsage();
+    u.date = todayKey();
+    u.count = (Number(u.count) || 0) + 1;
+    localStorage.setItem(AI_USAGE_KEY, JSON.stringify(u));
+  }
+
+  /** Try AI when user typed a custom 一念, or picked a non-default theme chip. */
+  function shouldTryAi(question, theme) {
+    const q = normalizeQuestion(question);
+    const t = theme || DEFAULT_THEME;
+    if (q !== DEFAULT_QUESTION) return true;
+    if (t !== DEFAULT_THEME) return true;
+    return false;
+  }
+
+  function normalizeAiReading(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const idRaw = raw.id != null ? String(raw.id) : "";
+    const id = idRaw.indexOf("ai-") === 0 ? idRaw : ("ai-" + (idRaw || String(Date.now())));
+    const reading = {
+      id: id,
+      glyph: raw.glyph || "✦",
+      title: raw.title || "今日一抽",
+      reading: raw.reading || "",
+      nudge: raw.nudge || "",
+      topics: Array.isArray(raw.topics) ? raw.topics : []
+    };
+    if (!reading.reading) return null;
+    return reading;
+  }
+
+  async function fetchAiReading(question, theme) {
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = setTimeout(function () {
+      if (controller) controller.abort();
+    }, AI_TIMEOUT_MS);
+    try {
+      const res = await fetch(AI_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: normalizeQuestion(question),
+          theme: theme || DEFAULT_THEME
+        }),
+        signal: controller ? controller.signal : undefined
+      });
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (e) {
+        data = null;
+      }
+      if (!res.ok || !data || !data.ok) {
+        return {
+          ok: false,
+          error: (data && data.error) || ("http-" + res.status)
+        };
+      }
+      const reading = normalizeAiReading(data.reading);
+      if (!reading) return { ok: false, error: "empty-reading" };
+      return { ok: true, reading: reading, source: data.source || "ai" };
+    } catch (e) {
+      const name = e && e.name ? e.name : "";
+      return {
+        ok: false,
+        error: name === "AbortError" ? "timeout" : "network"
+      };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  /**
+   * Resolve a reading: optional free AI first, else keyword pool.
+   * Returns { reading, source: "ai"|"keyword", fallback: null|"limit"|"error" }
+   */
+  async function resolveReading(question, theme) {
+    if (!shouldTryAi(question, theme)) {
+      return {
+        reading: pickReading(question, theme),
+        source: "keyword",
+        fallback: null
+      };
+    }
+    if (aiCreditsLeft() <= 0) {
+      return {
+        reading: pickReading(question, theme),
+        source: "keyword",
+        fallback: "limit"
+      };
+    }
+    const ai = await fetchAiReading(question, theme);
+    if (ai.ok && ai.reading) {
+      bumpAiUsage();
+      return { reading: ai.reading, source: "ai", fallback: null };
+    }
+    return {
+      reading: pickReading(question, theme),
+      source: "keyword",
+      fallback: "error"
+    };
+  }
+
   function pickReading(question, theme) {
     if (isFoodAsk(question, theme)) {
       return pickFromPool(FOOD_READINGS, recentAvoidIds());
@@ -1357,6 +1480,9 @@
 
   function alignReading(state) {
     if (!state || !state.reading) return state;
+    // Keep a successful Workers AI card across refresh /「睇返今日」.
+    // Food keyword realignment is only for non-AI cards that landed in the wrong pool.
+    if (String(state.reading.id || "").indexOf("ai-") === 0) return state;
     const wantFood = isFoodAsk(state.question, state.theme);
     const isFood = FOOD_READINGS.some((item) => item.id === state.reading.id);
     if (wantFood && !isFood) {
@@ -1502,16 +1628,38 @@
     els.drawHint.textContent = isRedraw ? "再開牌氣聚集緊…（娛樂）" : "牌氣聚集緊…";
     els.deck.classList.add("drawing");
 
-    const reading = pickReading(pendingQuestion, pendingTheme);
+    const q = pendingQuestion;
+    const th = pendingTheme;
+    // Kick off AI (if eligible) in parallel with the draw animation.
+    const resolvePromise = resolveReading(q, th);
     const date = today;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const wait = reduceMotion ? 200 : 1600;
 
-    setTimeout(() => {
+    setTimeout(function () {
       els.deck.classList.remove("drawing");
       els.deck.classList.add("reveal");
 
-      setTimeout(() => {
+      setTimeout(async function () {
+        let reading = null;
+        let fallback = null;
+        let source = "keyword";
+        try {
+          const resolved = await resolvePromise;
+          reading = resolved.reading;
+          fallback = resolved.fallback;
+          source = resolved.source || "keyword";
+        } catch (e) {
+          reading = pickReading(q, th);
+          fallback = "error";
+          source = "keyword";
+        }
+        if (!reading) {
+          reading = pickReading(q, th);
+          fallback = fallback || "error";
+          source = "keyword";
+        }
+
         if (isRedraw) {
           if (!consumeLuckCredit()) {
             drawing = false;
@@ -1525,11 +1673,12 @@
           updateStreak(date);
         }
         const state = {
-          date,
-          reading,
+          date: date,
+          reading: reading,
           question: pendingQuestion || DEFAULT_QUESTION,
           theme: pendingTheme || DEFAULT_THEME,
-          redraw: isRedraw
+          redraw: isRedraw,
+          source: source
         };
         saveState(state);
         recordHistory(state);
@@ -1539,7 +1688,11 @@
         showView("result");
         refreshLuckUI();
         drawing = false;
-        if (isRedraw) showToast("支持再開完成（娛樂）");
+        if (fallback === "limit" || fallback === "error") {
+          showToast("今日免費 AI 額用完，改用關鍵字對題");
+        } else if (isRedraw) {
+          showToast("支持再開完成（娛樂）");
+        }
       }, reduceMotion ? 50 : 450);
     }, wait);
   }

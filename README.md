@@ -30,7 +30,7 @@ cd /workspace/daily-draw && python3 -m http.server 8765
 |------|------|
 | `index.html` | 頁面結構 |
 | `styles.css` | 夜間神秘風樣式（手機優先） |
-| `app.js` | 抽牌動畫、55 則原創解讀、24 則食咩、近期唔重複、每日鎖定、複製文案 |
+| `app.js` | 抽牌動畫、原創解讀、食咩牌庫、關鍵字對題、免費 Workers AI（每裝置每日 5 次，失敗或用完就退回關鍵字）、分享同下載 |
 
 ## MVP 行為
 
@@ -46,7 +46,7 @@ cd /workspace/daily-draw && python3 -m http.server 8765
 
 - 內容僅供娛樂，非專業諮詢。
 - 解讀為原創輕量文案，並非任何版權卡牌體系。
-- 未接 API。公開頁由 GitHub Pages（`main` / `/`）提供，見下方。
+- 自訂「今日一念」，或揀咗打工／姻緣心情／今日食咩，會先問免費 Cloudflare Workers AI（每部裝置每日 5 次）。預設「今日氣場」加空白一念、逾時、或免費額用完，就用本地關鍵字對題。公開頁由 GitHub Pages（`main` / `/`）提供，見下方。
 
 ## GitHub Pages
 
