@@ -628,6 +628,7 @@
     result: document.getElementById("view-result"),
     locked: document.getElementById("view-locked"),
     btnStart: document.getElementById("btn-start"),
+    btnBrandHome: document.getElementById("btn-brand-home"),
     btnDraw: document.getElementById("btn-draw"),
     btnCopy: document.getElementById("btn-copy"),
     btnShare: document.getElementById("btn-share"),
@@ -689,6 +690,7 @@
   const LUCK_MAX_EXTRAS = 3;
   const CLOUD_USER_COL = "dailyDrawUsers";
   let drawing = false;
+  let drawTicket = 0;
   let redrawMode = false;
   let pendingQuestion = "";
   let pendingTheme = DEFAULT_THEME;
@@ -1256,6 +1258,18 @@
     els.locked.hidden = name !== "locked";
   }
 
+  function goHome() {
+    // Leave today's saved draw in localStorage. Only drop an in-flight animation.
+    drawTicket += 1;
+    drawing = false;
+    showView("home");
+    try {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (_) {
+      window.scrollTo(0, 0);
+    }
+  }
+
   /** Free local topic keywords — no AI / no paid API. */
   const TOPIC_KEYWORDS = {
     travel: /旅行|旅遊|出差|出國|出埠|去旅行|機票|機場|酒店|旅館|住宿|簽證|護照|行李|背包|自由行|跟團|度假|渡假|景點|打卡遊|名古屋|東京|大阪|京都|北海道|台灣|日本|韓國|泰國|歐洲|美國|\bhotel\b|\bflight\b|\bairport\b|\btravel\b|\btrip\b|\bvisa\b|\bpassport\b|\bluggage\b|\bnagoya\b|\btokyo\b|\bosaka\b/i,
@@ -1623,6 +1637,7 @@
     }
 
     drawing = true;
+    const ticket = drawTicket;
     els.btnDraw.disabled = true;
     els.btnDraw.textContent = "抽緊…";
     els.drawHint.textContent = isRedraw ? "再開牌氣聚集緊…（娛樂）" : "牌氣聚集緊…";
@@ -1637,10 +1652,12 @@
     const wait = reduceMotion ? 200 : 1600;
 
     setTimeout(function () {
+      if (ticket !== drawTicket) return;
       els.deck.classList.remove("drawing");
       els.deck.classList.add("reveal");
 
       setTimeout(async function () {
+        if (ticket !== drawTicket) return;
         let reading = null;
         let fallback = null;
         let source = "keyword";
@@ -1659,6 +1676,7 @@
           fallback = fallback || "error";
           source = "keyword";
         }
+        if (ticket !== drawTicket) return;
 
         if (isRedraw) {
           if (!consumeLuckCredit()) {
@@ -1810,6 +1828,17 @@
         });
       });
     }
+
+    if (els.btnBrandHome) {
+      els.btnBrandHome.addEventListener("click", function () {
+        goHome();
+      });
+    }
+    document.querySelectorAll("[data-nav=\"home\"]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        goHome();
+      });
+    });
 
     els.btnStart.addEventListener("click", startDrawFlow);
     els.btnDraw.addEventListener("click", runDraw);

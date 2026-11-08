@@ -37,9 +37,11 @@
 
     <div class="stage">
     <header class="brand">
-      <p class="brand-mark">✦</p>
-      <h1 class="brand-name">每日一抽</h1>
-      <p class="brand-tag">今日一念 · 輕鬆睇下</p>
+      <button type="button" class="brand-home" id="btn-brand-home" aria-label="返去首頁">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span class="brand-name">每日一抽</span>
+        <span class="brand-tag">今日一念 · 輕鬆睇下</span>
+      </button>
       <div class="account-bar">
         <span class="account-chip" id="account-chip">訪客</span>
         <button type="button" class="btn-account" id="btn-account">登入／註冊</button>
@@ -78,6 +80,9 @@
     </section>
 
     <section id="view-draw" class="view" hidden>
+      <div class="view-nav">
+        <button type="button" class="btn-nav-back" id="btn-back-draw" data-nav="home">← 返回</button>
+      </div>
       <p class="step-label" id="step-label">閉吓眼 · 慢慢深呼吸</p>
       <div class="deck" id="deck" role="button" tabindex="0" aria-label="撳一下抽牌">
         <div class="card-back" id="card-back">
@@ -90,6 +95,9 @@
     </section>
 
     <section id="view-result" class="view" hidden>
+      <div class="view-nav">
+        <button type="button" class="btn-nav-back" id="btn-back-result" data-nav="home">← 返去首頁</button>
+      </div>
       <article class="result-card" id="result-card" aria-live="polite">
         <div class="result-top">
           <span class="result-date" id="result-date"></span>
@@ -142,6 +150,9 @@
     </section>
 
     <section id="view-locked" class="view" hidden>
+      <div class="view-nav">
+        <button type="button" class="btn-nav-back" id="btn-back-locked" data-nav="home">← 返去首頁</button>
+      </div>
       <div class="locked-wrap">
         <p class="locked-emoji" aria-hidden="true">🌙</p>
         <h2 class="locked-title">今日已經抽過喇</h2>
