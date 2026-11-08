@@ -84,7 +84,27 @@ body {
   margin-bottom: 28px;
 }
 
+.brand-home {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+
+.brand-home:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
 .brand-mark {
+  display: block;
   margin: 0;
   color: var(--gold);
   font-size: 1.25rem;
@@ -92,6 +112,7 @@ body {
 }
 
 .brand-name {
+  display: block;
   margin: 6px 0 4px;
   font-family: var(--font-serif);
   font-weight: 700;
@@ -100,9 +121,38 @@ body {
 }
 
 .brand-tag {
+  display: block;
   margin: 0;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.view-nav {
+  margin: 0 0 14px;
+  align-self: stretch;
+  text-align: left;
+}
+
+.btn-nav-back {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 6px 2px;
+  cursor: pointer;
+}
+
+.btn-nav-back:hover,
+.btn-nav-back:focus-visible {
+  color: var(--accent);
+}
+
+.btn-nav-back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .view[hidden] {
