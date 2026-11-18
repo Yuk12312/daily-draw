@@ -658,17 +658,6 @@
     toast: document.getElementById("toast"),
     historyBox: document.getElementById("history-box"),
     historyList: document.getElementById("history-list"),
-    tipBox: document.getElementById("tip-box"),
-    luckStatus: document.getElementById("luck-status"),
-    luckPanel: document.getElementById("luck-panel"),
-    btnLuckOpen: document.getElementById("btn-luck-open"),
-    btnLuckConfirm: document.getElementById("btn-luck-confirm"),
-    btnLuckRedraw: document.getElementById("btn-luck-redraw"),
-    luckStatusLocked: document.getElementById("luck-status-locked"),
-    luckPanelLocked: document.getElementById("luck-panel-locked"),
-    btnLuckOpenLocked: document.getElementById("btn-luck-open-locked"),
-    btnLuckConfirmLocked: document.getElementById("btn-luck-confirm-locked"),
-    btnLuckRedrawLocked: document.getElementById("btn-luck-redraw-locked"),
     btnAccount: document.getElementById("btn-account"),
     accountChip: document.getElementById("account-chip"),
     authModal: document.getElementById("auth-modal"),
@@ -693,12 +682,9 @@
   const SITE_URL = "https://yuk12312.github.io/daily-draw/";
   const STREAK_KEY = "daily-draw-streak-v1";
   const HISTORY_KEY = "daily-draw-history-v1";
-  const LUCK_KEY = "daily-draw-luck-v1";
-  const LUCK_MAX_EXTRAS = 3;
   const CLOUD_USER_COL = "dailyDrawUsers";
   let drawing = false;
   let drawTicket = 0;
-  let redrawMode = false;
   let pendingQuestion = "";
   let pendingTheme = DEFAULT_THEME;
   let _fb = null;
@@ -706,7 +692,6 @@
   let _fbDb = null;
   let _fbUser = null;
   let _authReady = false;
-  let _syncingCloud = false;
 
   function initFirebase() {
     if (_fb) return !!_fbAuth;
@@ -724,10 +709,8 @@
         _authReady = true;
         updateAuthUI();
         if (user) {
-          await syncLuckOnLogin();
           await maybeApplyCloudReadingMeta();
         }
-        refreshLuckUI();
       });
       return true;
     } catch (e) {
@@ -830,15 +813,15 @@
     }
     if (els.authHint) {
       els.authHint.textContent = signedIn
-        ? "再開次數同今日抽牌摘要會跟住帳號（僅供娛樂）。"
-        : "用電郵註冊或登入；再開次數可跟住帳號（僅供娛樂）。";
+        ? "今日抽牌摘要會跟住帳號（僅供娛樂）。"
+        : "用電郵註冊或登入；今日抽牌摘要可跟住帳號（僅供娛樂）。";
     }
     if (els.authGuest) els.authGuest.hidden = signedIn;
     if (els.authUser) els.authUser.hidden = !signedIn;
     if (els.authEmailLine) {
       els.authEmailLine.textContent = signedIn ? ("帳號：" + email) : "";
     }
-    const softHtml = '登入後再開次數可跟住帳號（可選，唔強制）。<button type="button" class="login-soft-btn" data-open-auth>去登入</button>';
+    const softHtml = '登入後今日抽牌可跟住帳號（可選，唔強制）。<button type="button" class="login-soft-btn" data-open-auth>去登入</button>';
     [els.loginSoft, els.loginSoftLocked].forEach((node) => {
       if (!node) return;
       if (signedIn) {
@@ -856,90 +839,6 @@
     return _fbDb.collection(CLOUD_USER_COL).doc(_fbUser.uid);
   }
 
-  function normalizeLuck(raw) {
-    const today = todayKey();
-    if (!raw || raw.date !== today) {
-      return { date: today, credits: 0, extrasGranted: 0 };
-    }
-    return {
-      date: today,
-      credits: Math.max(0, Number(raw.credits) || 0),
-      extrasGranted: Math.max(0, Number(raw.extrasGranted) || 0)
-    };
-  }
-
-  function mergeLuck(a, b) {
-    const today = todayKey();
-    const left = normalizeLuck(a);
-    const right = normalizeLuck(b);
-    const extrasGranted = Math.min(
-      LUCK_MAX_EXTRAS,
-      Math.max(left.extrasGranted, right.extrasGranted)
-    );
-    let credits = Math.max(left.credits, right.credits);
-    credits = Math.min(credits, LUCK_MAX_EXTRAS);
-    // Remaining credits cannot exceed grants for the day in a healthy state,
-    // but devices may diverge; keep soft clamp to extrasGranted when both same day.
-    if (left.date === today && right.date === today) {
-      credits = Math.min(credits, Math.max(extrasGranted, credits));
-    }
-    return { date: today, credits, extrasGranted };
-  }
-
-  function loadLuckLocal() {
-    try {
-      const raw = JSON.parse(localStorage.getItem(LUCK_KEY) || "null");
-      return normalizeLuck(raw);
-    } catch {
-      return normalizeLuck(null);
-    }
-  }
-
-  function saveLuckLocal(luck) {
-    localStorage.setItem(LUCK_KEY, JSON.stringify(normalizeLuck(luck)));
-  }
-
-  async function pushLuckToCloud(luck) {
-    const ref = userDocRef();
-    if (!ref) return;
-    const payload = {
-      email: (_fbUser && _fbUser.email) || "",
-      luck: normalizeLuck(luck),
-      updatedAt: Date.now()
-    };
-    try {
-      await ref.set(payload, { merge: true });
-    } catch (e) {
-      console.warn(e);
-      showToast(friendlyAuthError(e));
-    }
-  }
-
-  async function syncLuckOnLogin() {
-    if (!_fbUser || _syncingCloud) return;
-    _syncingCloud = true;
-    try {
-      const local = loadLuckLocal();
-      const ref = userDocRef();
-      if (!ref) return;
-      const snap = await ref.get();
-      const cloudLuck = snap.exists ? (snap.data().luck || null) : null;
-      const merged = mergeLuck(local, cloudLuck);
-      saveLuckLocal(merged);
-      await ref.set({
-        email: _fbUser.email || "",
-        luck: merged,
-        updatedAt: Date.now()
-      }, { merge: true });
-      showToast("已同步帳號再開次數");
-    } catch (e) {
-      console.warn(e);
-      showToast(friendlyAuthError(e));
-    } finally {
-      _syncingCloud = false;
-    }
-  }
-
   async function pushReadingMeta(state) {
     const ref = userDocRef();
     if (!ref || !state || !state.reading) return;
@@ -954,8 +853,7 @@
           glyph: state.reading.glyph,
           reading: state.reading.reading,
           nudge: state.reading.nudge,
-          id: state.reading.id,
-          redraw: !!state.redraw
+          id: state.reading.id
         },
         updatedAt: Date.now()
       }, { merge: true });
@@ -991,14 +889,12 @@
         reading,
         question: meta.question || DEFAULT_QUESTION,
         theme: meta.theme || DEFAULT_THEME,
-        redraw: !!meta.redraw,
         fromCloud: true
       };
       saveState(state);
       recordHistory(state);
       fillResult(state.reading, state.date, state.question, state.theme);
       showView("locked");
-      refreshLuckUI();
       showToast("已從帳號載入今日抽牌");
     } catch (e) {
       console.warn(e);
@@ -1057,7 +953,6 @@
       await _fbAuth.signOut();
       showToast("已登出（本機進度保留）");
       updateAuthUI();
-      refreshLuckUI();
       closeAuthModal();
     } catch (e) {
       setAuthError(friendlyAuthError(e));
@@ -1098,135 +993,6 @@
 
   function saveState(state) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }
-
-  function loadLuck() {
-    return loadLuckLocal();
-  }
-
-  function saveLuck(luck) {
-    const normalized = normalizeLuck(luck);
-    saveLuckLocal(normalized);
-    if (_fbUser) {
-      pushLuckToCloud(normalized);
-    }
-  }
-
-  function luckCredits() {
-    return loadLuck().credits;
-  }
-
-  function canGrantLuck() {
-    return loadLuck().extrasGranted < LUCK_MAX_EXTRAS;
-  }
-
-  function grantLuckCredit() {
-    const luck = loadLuck();
-    if (luck.extrasGranted >= LUCK_MAX_EXTRAS) {
-      return { ok: false, luck, reason: "full" };
-    }
-    luck.credits += 1;
-    luck.extrasGranted += 1;
-    luck.date = todayKey();
-    saveLuck(luck);
-    return { ok: true, luck };
-  }
-
-  function consumeLuckCredit() {
-    const luck = loadLuck();
-    if (luck.credits <= 0) return false;
-    luck.credits -= 1;
-    saveLuck(luck);
-    return true;
-  }
-
-  function refreshLuckUI() {
-    const luck = loadLuck();
-    const remaining = LUCK_MAX_EXTRAS - luck.extrasGranted;
-    const statusText = luck.credits > 0
-      ? `今日仲有 ${luck.credits} 次支持再開（已打賞 ${luck.extrasGranted}/${LUCK_MAX_EXTRAS}）`
-      : remaining > 0
-        ? `今日仲可以打賞再開 ${remaining} 次（榮譽制 · 僅供娛樂）`
-        : `今日再開次數已滿（最多 ${LUCK_MAX_EXTRAS} 次）`;
-
-    [els.luckStatus, els.luckStatusLocked].forEach((node) => {
-      if (!node) return;
-      node.hidden = false;
-      node.textContent = statusText;
-    });
-
-    const showRedraw = luck.credits > 0;
-    if (els.btnLuckRedraw) els.btnLuckRedraw.hidden = !showRedraw;
-    if (els.btnLuckRedrawLocked) els.btnLuckRedrawLocked.hidden = !showRedraw;
-
-    const canOpen = remaining > 0;
-    if (els.btnLuckOpen) {
-      els.btnLuckOpen.disabled = !canOpen && luck.credits <= 0;
-      els.btnLuckOpen.textContent = canOpen
-        ? "打賞支持 · 今日再開一次"
-        : luck.credits > 0
-          ? "今日再開已滿 · 可用剩餘次數"
-          : "今日再開次數已滿";
-    }
-    if (els.btnLuckOpenLocked) {
-      els.btnLuckOpenLocked.disabled = !canOpen && luck.credits <= 0;
-      els.btnLuckOpenLocked.textContent = canOpen
-        ? "打賞支持 · 今日再開一次"
-        : luck.credits > 0
-          ? "今日再開已滿 · 可用剩餘次數"
-          : "今日再開次數已滿";
-    }
-  }
-
-  function openLuckPanel(which) {
-    if (which === "locked") {
-      if (els.luckPanelLocked) els.luckPanelLocked.hidden = false;
-    } else if (els.luckPanel) {
-      els.luckPanel.hidden = false;
-    }
-    refreshLuckUI();
-  }
-
-  function confirmLuckTip() {
-    const result = grantLuckCredit();
-    if (!result.ok) {
-      showToast(`今日再開次數已滿（最多 ${LUCK_MAX_EXTRAS} 次）`);
-      refreshLuckUI();
-      return;
-    }
-    refreshLuckUI();
-    if (!_fbUser) {
-      showToast("打賞確認成功；登入後再開次數可跟住帳號");
-    } else {
-      showToast("打賞確認成功，可以再開一次（娛樂）");
-    }
-  }
-
-  function beginLuckRedraw() {
-    if (luckCredits() <= 0) {
-      showToast("未有再開次數，請先打賞確認");
-      return;
-    }
-    redrawMode = true;
-    if (els.intention) els.intention.value = "";
-    showView("home");
-    showToast("揀主題後開始再開一次（娛樂）");
-  }
-
-  function archivePreviousReading(state) {
-    if (!state || !state.reading) return;
-    const row = {
-      date: state.date,
-      id: state.reading.id || "",
-      glyph: state.reading.glyph,
-      title: (state.reading.title || "") + "（再開前）",
-      theme: state.theme || DEFAULT_THEME,
-      question: normalizeQuestion(state.question),
-      archived: true
-    };
-    const rows = loadHistory();
-    rows.unshift(row);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(rows.slice(0, 14)));
   }
 
   function updateStreak(date) {
@@ -1568,15 +1334,14 @@
       theme: state.theme || DEFAULT_THEME,
       question: normalizeQuestion(state.question)
     };
-    // Keep archived same-day rows (再開前); replace only non-archived same-day primary.
-    const rows = loadHistory().filter((item) => item.date !== row.date || item.archived);
+    const rows = loadHistory().filter((item) => item.date !== row.date);
     rows.unshift(row);
     localStorage.setItem(HISTORY_KEY, JSON.stringify(rows.slice(0, 14)));
   }
 
   function renderHistory(currentDate) {
     if (!els.historyBox || !els.historyList) return;
-    const rows = loadHistory().filter((item) => item.date !== currentDate || item.archived).slice(0, 7);
+    const rows = loadHistory().filter((item) => item.date !== currentDate).slice(0, 7);
     if (!rows.length) {
       els.historyBox.hidden = true;
       return;
@@ -1629,15 +1394,11 @@
   function startDrawFlow() {
     const existing = loadState();
     const today = todayKey();
-    if (existing && existing.date === today && luckCredits() <= 0) {
+    if (existing && existing.date === today) {
       fillResult(existing.reading, existing.date, existing.question, existing.theme);
       showView("locked");
-      refreshLuckUI();
-      showToast("今日已抽過；打賞支持後可以再開");
+      showToast("今日已抽過，聽日再嚟");
       return;
-    }
-    if (existing && existing.date === today && luckCredits() > 0) {
-      redrawMode = true;
     }
     pendingQuestion = normalizeQuestion(els.intention ? els.intention.value : "");
     pendingTheme = selectedTheme();
@@ -1664,17 +1425,9 @@
     if (drawing || els.btnDraw.disabled) return;
     const existing = loadState();
     const today = todayKey();
-    const isRedraw = !!(existing && existing.date === today && (redrawMode || luckCredits() > 0));
-    if (existing && existing.date === today && !isRedraw) {
+    if (existing && existing.date === today) {
       fillResult(existing.reading, existing.date, existing.question, existing.theme);
       showView("locked");
-      refreshLuckUI();
-      return;
-    }
-    if (isRedraw && luckCredits() <= 0) {
-      showToast("未有再開次數，請先打賞確認");
-      showView("result");
-      refreshLuckUI();
       return;
     }
 
@@ -1682,7 +1435,7 @@
     const ticket = drawTicket;
     els.btnDraw.disabled = true;
     els.btnDraw.textContent = "抽緊…";
-    els.drawHint.textContent = isRedraw ? "再開牌氣聚集緊…（娛樂）" : "牌氣聚集緊…";
+    els.drawHint.textContent = "牌氣聚集緊…";
     els.deck.classList.add("drawing");
 
     const q = pendingQuestion;
@@ -1720,38 +1473,22 @@
         }
         if (ticket !== drawTicket) return;
 
-        if (isRedraw) {
-          if (!consumeLuckCredit()) {
-            drawing = false;
-            showToast("再開次數剛用完");
-            showView("result");
-            refreshLuckUI();
-            return;
-          }
-          archivePreviousReading(existing);
-        } else {
-          updateStreak(date);
-        }
+        updateStreak(date);
         const state = {
           date: date,
           reading: reading,
           question: pendingQuestion || DEFAULT_QUESTION,
           theme: pendingTheme || DEFAULT_THEME,
-          redraw: isRedraw,
           source: source
         };
         saveState(state);
         recordHistory(state);
         if (_fbUser) pushReadingMeta(state);
-        redrawMode = false;
         fillResult(reading, date, state.question, state.theme);
         showView("result");
-        refreshLuckUI();
         drawing = false;
         if (fallback === "limit" || fallback === "error") {
           showToast("今日一念 AI 額用完，改用牌庫對題");
-        } else if (isRedraw) {
-          showToast("支持再開完成（娛樂）");
         }
       }, reduceMotion ? 50 : 450);
     }, wait);
@@ -1854,10 +1591,8 @@
       recordHistory(aligned);
       fillResult(aligned.reading, aligned.date, aligned.question, aligned.theme);
       showView("locked");
-      refreshLuckUI();
     } else {
       showView("home");
-      refreshLuckUI();
     }
 
     if (els.themeChips) {
@@ -1899,28 +1634,8 @@
       if (s) {
         fillResult(s.reading, s.date, s.question, s.theme);
         showView("result");
-        refreshLuckUI();
       }
     });
-
-    if (els.btnLuckOpen) {
-      els.btnLuckOpen.addEventListener("click", () => openLuckPanel("result"));
-    }
-    if (els.btnLuckOpenLocked) {
-      els.btnLuckOpenLocked.addEventListener("click", () => openLuckPanel("locked"));
-    }
-    if (els.btnLuckConfirm) {
-      els.btnLuckConfirm.addEventListener("click", confirmLuckTip);
-    }
-    if (els.btnLuckConfirmLocked) {
-      els.btnLuckConfirmLocked.addEventListener("click", confirmLuckTip);
-    }
-    if (els.btnLuckRedraw) {
-      els.btnLuckRedraw.addEventListener("click", beginLuckRedraw);
-    }
-    if (els.btnLuckRedrawLocked) {
-      els.btnLuckRedrawLocked.addEventListener("click", beginLuckRedraw);
-    }
 
     if (els.btnAccount) {
       els.btnAccount.addEventListener("click", openAuthModal);
@@ -1956,7 +1671,6 @@
 
     initFirebase();
     updateAuthUI();
-    refreshLuckUI();
     refreshAiCreditsUI();
   }
 
