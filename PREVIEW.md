@@ -10,7 +10,7 @@
 2. Authentication → **Settings → Authorized domains** 加：
    - `localhost`
    - `yuk12312.github.io`（上線後要）
-3. Firestore 集合：`dailyDrawUsers/{uid}`（再開次數 `luck`、今日摘要 `readingMeta`）。規則要允許登入用戶讀寫自己嘅 doc；訪客繼續只用 localStorage。
+3. Firestore 集合：`dailyDrawUsers/{uid}`（今日摘要 `readingMeta`）。規則要允許登入用戶讀寫自己嘅 doc；訪客繼續只用 localStorage。舊文件如果仲有 `luck` 欄，呢個 GitHub Pages 版本唔會讀、寫或者顯示。
 4. 預覽唔強制電郵驗證。
 
 ## 本地試
@@ -23,9 +23,9 @@ python3 -m http.server 8766 --bind 0.0.0.0
 開：`http://127.0.0.1:8766/`
 
 1. 撳「登入／註冊」→ 註冊電郵＋密碼（≥6）
-2. 登入後頂欄顯示電郵；打賞再開次數會寫入帳號
-3. 登出後本機進度仍在；再開仍可用 localStorage
-4. 訪客打賞唔強制登入，會提示「登入後再開次數可跟住帳號」
+2. 登入後頂欄顯示電郵；今日抽牌摘要會寫入帳號（`readingMeta`）
+3. 登出後本機進度仍在
+4. 訪客唔使登入都可以每日免費抽一次
 
 ## API key Website restrictions（本機常見紅字 Error）
 
@@ -48,16 +48,15 @@ python3 -m http.server 8766 --bind 0.0.0.0
 - Email/Password provider 未開 → 註冊／登入失敗
 - 網域未授權 → `unauthorized-domain`
 - **API key HTTP referrer 未加本機網址** → Network 403 `API_KEY_HTTP_REFERRER_BLOCKED`，介面以前只顯示「Error」
-- Firestore rules 未放行 `dailyDrawUsers` → 同步失敗（本機再開仍可用）
-- 榮譽制打賞仍然驗唔到真付款；未接 Stripe
+- Firestore rules 未放行 `dailyDrawUsers` → 今日抽牌摘要同步失敗（本機結果仍可用）
 
-## 文案
+## 冇打賞（GitHub Pages）
 
-用「打賞支持 · 娛樂再開」，**唔用「改運」**。
+呢個 repo 係 GitHub Pages 版本。**冇打賞、捐款、付款、支付寶二維碼，亦冇「支持再開」。** 每日只得免費一抽。電郵登入保留，只同步今日抽牌摘要。
 
 ## 本輪預覽改動
 
-已移除「抽完未完」整段（細事 checklist、今日感受筆記）。保留分享／下載、打賞支持再開、近期歷史、電郵登入。**未 push。**
+已移除打賞支持／支持再開（按鈕、面板、支付寶圖、再開次數）。保留分享／下載、近期歷史、電郵登入、主題掣、自訂今日一念 AI。
 
 
 ## 關鍵字對題（本機預覽）

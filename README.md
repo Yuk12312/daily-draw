@@ -37,7 +37,7 @@ cd /workspace/daily-draw && python3 -m http.server 8765
 1. 首屏 hook →「開始今日一抽」
 2. 撳牌背／掣 → 簡易洗牌動畫 → 結果卡（標題／短解讀／今日提示）
 3. 可「複製結果文案」方便分享
-4. 同一日再開會見到「今日已經抽過」；可睇返當日結果
+4. 同一日再入會見到「今日已經抽過」；可睇返當日結果。每日只得免費一抽，冇再開
 5. 頁腳同結果卡均標明「僅供娛樂」
 
 清除今日鎖定：瀏覽器開發者工具 → Application → Local Storage → 刪除 `daily-draw-v1`。
@@ -53,5 +53,7 @@ cd /workspace/daily-draw && python3 -m http.server 8765
 公開網站：<https://yuk12312.github.io/daily-draw/>
 
 由 `main` 分支根目錄（`/`）嘅靜態檔案提供：`index.html`、`styles.css`、`app.js`。
+
+**呢個 GitHub Pages 版本冇打賞、捐款、付款或再開次數。** GitHub Pages 條款唔允許商業／變現用途，所以支付寶二維碼、打賞支持同相關文案都唔喺呢個 build。電郵登入仍然保留，用來同步今日抽牌摘要；帳號文件入面就算舊數據有 `luck` 欄，呢版都唔會讀、寫或者顯示。
 
 內容僅供娛樂，非專業諮詢；解讀為原創輕量文案。
